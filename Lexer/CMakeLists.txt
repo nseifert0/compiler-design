@@ -1,0 +1,2 @@
+project (Lexer)
+add_executable(Lexer main.cpp)
