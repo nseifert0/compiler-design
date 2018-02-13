@@ -34,3 +34,4 @@ Lexer/Lexer
 Lexer/Makefile
 Lexer/CMakeCache.txt
 Lexer/CMakeFiles/Lexer.dir/lexer.cpp.o
+Lexer/CMakeFiles/Lexer.dir/token.cpp.o
