@@ -6,8 +6,24 @@
 	 char x;
 	 
 	 while(!eof()) {
-		x = file.get();
-		T.name = Comma;
+		switch(peek()) {
+			case('4'):
+				T.name = Decimal_Integer_Literal;
+				accept();
+				break;
+			case('+'):
+				T.name = Arithmetic_Operator;
+				accept();
+				break;
+			case('5'):
+				T.name = Decimal_Integer_Literal;
+				accept();
+				break;
+			case(';'):
+				T.name = Semicolon;
+				accept();
+				break;				
+		}
 		T.print();
 	 }
  }
