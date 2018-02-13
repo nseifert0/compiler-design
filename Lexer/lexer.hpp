@@ -1,6 +1,8 @@
 #ifndef LEXER_HPP
 #define LEXER_HPP
 
+#include "token.hpp"
+
 #include <fstream>
 
 class Lexer {
@@ -18,6 +20,7 @@ class Lexer {
 	
 	private:
 		std::ifstream file;
+		Token T;
 };
 
 #endif

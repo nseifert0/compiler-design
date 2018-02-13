@@ -1,5 +1,4 @@
 #include "lexer.hpp"
-
 #include <iostream>
 
  void Lexer::lex() {
@@ -8,7 +7,8 @@
 	 
 	 while(!eof()) {
 		x = file.get();
-		std::cout << x << "\n";
+		T.name = Comma;
+		T.print();
 	 }
  }
  
@@ -24,7 +24,7 @@
  
  void Lexer::accept() {
 	 // Add character to current token
-	 // token.add(file.get());
+	 file.get();
  }
  
  void Lexer::reject() {
