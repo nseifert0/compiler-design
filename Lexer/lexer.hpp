@@ -16,7 +16,7 @@ class Lexer {
 	bool eof();
 	char peek();
 	void accept();
-	void reject();
+	void ignore();
 	
 	private:
 		std::ifstream file;

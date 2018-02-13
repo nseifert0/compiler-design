@@ -3,13 +3,17 @@
 
 void Lexer::lex() {
 	std::cout << "You are trying to Lex\n";
-	char x;
 	 
 	while(!eof()) {
+		while(isspace(peek())) {
+			ignore();
+		}
 		if(isdigit(peek())) {
 			T.name = Decimal_Integer_Literal;
 		}
-		
+		else if(isalpha(peek())) {
+			T.name = Identifier;
+		}
 		switch(peek()) {
 			case('+'):
 				T.name = Arithmetic_Operator;
@@ -41,7 +45,7 @@ void Lexer::accept() {
 	file.get();
 }
  
-void Lexer::reject() {
+void Lexer::ignore() {
 	// Get character and do nothing with it
 	file.get();
 }
