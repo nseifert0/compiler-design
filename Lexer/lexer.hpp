@@ -5,14 +5,16 @@
 
 class Lexer {
 	public:
-		Lexer(const char* path)
-			: file(path)
+		Lexer(const char* filepath)
+			: file(filepath)
 		{
 		}
 	
 	void lex();
 	bool eof();
 	char peek();
+	void accept();
+	void reject();
 	
 	private:
 		std::ifstream file;

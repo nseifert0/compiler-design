@@ -21,3 +21,13 @@
  char Lexer::peek() {
 	 return file.peek();
  }
+ 
+ void Lexer::accept() {
+	 // Add character to current token
+	 // token.add(file.get());
+ }
+ 
+ void Lexer::reject() {
+	 // Get character and do nothing with it
+	 file.get();
+ }
