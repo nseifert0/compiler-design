@@ -14,15 +14,41 @@ void Lexer::lex() {
 		else if(isalpha(peek())) {
 			T.name = Identifier;
 		}
-		switch(peek()) {
-			case('+'):
-				T.name = Arithmetic_Operator;
-				break;
-			case(';'):
-				T.name = Semicolon;
-				break;
-			default:
-				break;
+		else {
+			switch(peek()) {
+				case('{'):
+					T.name = Left_Brace;
+					break;
+				case('}'):
+					T.name = Right_Brace;
+					break;
+				case('('):
+					T.name = Left_Paren;
+					break;
+				case(')'):
+					T.name = Right_Paren;
+					break;
+				case('['):
+					T.name = Left_Bracket;
+					break;
+				case(']'):
+					T.name = Right_Bracket;
+					break;
+				case(','):
+					T.name = Comma;
+					break;
+				case(';'):
+					T.name = Semicolon;
+					break;					
+				case(':'):
+					T.name = Colon;
+					break;
+				case('+'):
+					T.name = Arithmetic_Operator;
+					break;				
+				default:
+					break;
+			}
 		}
 		
 		accept();
