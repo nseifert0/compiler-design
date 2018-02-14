@@ -15,7 +15,9 @@ void Lexer::lex() {
 		}
 		else if(isalpha(peek())) {
 			T.name = Identifier;
-			accept();
+			while(isalnum(peek())) {
+				accept();
+			}
 			T.print();
 		}
 		else {
