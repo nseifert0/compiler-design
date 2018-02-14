@@ -69,6 +69,12 @@ void Lexer::lex() {
 						ignore();
 					}
 					break;
+				case('\''):
+					
+					break;
+				case('\"'):
+				
+					break;
 				case('{'):
 					T.name = Left_Brace;
 					accept();
@@ -114,8 +120,73 @@ void Lexer::lex() {
 					accept();
 					T.print();
 					break;
+				case('='):
+					T.name = Assignment_Operator;
+					accept();
+					T.print();
+					break;
+				case('!'):
+					T.name = Relational_Operator;
+					accept();
+					T.print();
+					break;
+				case('<'):
+					T.name = Relational_Operator;
+					accept();
+					T.print();
+					break;
+				case('>'):
+					T.name = Relational_Operator;
+					accept();
+					T.print();
+					break;
 				case('+'):
 					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
+					break;
+				case('-'):
+					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
+					break;
+				case('*'):
+					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
+					break;
+				case('/'):
+					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
+					break;
+				case('%'):
+					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
+					break;
+				case('&'):
+					T.name = Bitwise_Operator;
+					accept();
+					T.print();
+					break;
+				case('|'):
+					T.name = Bitwise_Operator;
+					accept();
+					T.print();
+					break;
+				case('^'):
+					T.name = Bitwise_Operator;
+					accept();
+					T.print();
+					break;
+				case('~'):
+					T.name = Bitwise_Operator;
+					accept();
+					T.print();
+					break;
+				case('?'):
+					T.name = Conditional_Operator;
 					accept();
 					T.print();
 					break;				
