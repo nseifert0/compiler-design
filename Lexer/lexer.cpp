@@ -10,7 +10,48 @@ void Lexer::lex() {
 		}
 		if(isdigit(peek())) {
 			T.name = Decimal_Integer_Literal;
-			accept();
+			if(peek() == '0') {
+				accept();
+			}
+			switch(peek()) {
+				case('x'):
+				case('X'):
+					T.name = Hexadecimal_Integer_Literal;
+					accept();
+					while(isxdigit(peek())) {
+						accept();
+					}
+					break;
+				case('b'):
+				case('B'):
+					T.name = Binary_Integer_Literal;
+					accept();
+					while((peek() == '0') || (peek() == '1')) {
+						accept();
+					}						
+					break;
+				default:
+					while(isdigit(peek())) {
+						accept();
+					}
+					if(peek() == '.') {
+						T.name = Floating_Point_Literal;
+						accept();
+						while(isdigit(peek())) {
+							accept();
+						}
+						if((peek() == 'E') || (peek() == 'e')) {
+							accept();
+							if((peek() == '+') || (peek() == '-')) {
+								accept();
+							}
+						}
+						while(isdigit(peek())) {
+							accept();
+						}
+					}
+					break;
+			}
 			T.print();
 		}
 		else if(isalpha(peek())) {
@@ -18,13 +59,13 @@ void Lexer::lex() {
 			while(isalnum(peek())) {
 				accept();
 			}
+			matchToTable();
 			T.print();
 		}
 		else {
 			switch(peek()) {
 				case('#'):
-					while((peek() != '\n') && !eof())
-					{
+					while((peek() != '\n') && (!eof())) {
 						ignore();
 					}
 					break;
@@ -103,4 +144,9 @@ void Lexer::accept() {
 void Lexer::ignore() {
 	// Get character and do nothing with it
 	file.get();
+}
+
+void Lexer::matchToTable() {
+	//Check if current Lexeme matches a keyword
+	
 }

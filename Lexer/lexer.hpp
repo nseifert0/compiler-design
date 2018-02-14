@@ -17,6 +17,7 @@ class Lexer {
 	char peek();
 	void accept();
 	void ignore();
+	void matchToTable();
 	
 	private:
 		std::ifstream file;
