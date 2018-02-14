@@ -10,49 +10,76 @@ void Lexer::lex() {
 		}
 		if(isdigit(peek())) {
 			T.name = Decimal_Integer_Literal;
+			accept();
+			T.print();
 		}
 		else if(isalpha(peek())) {
 			T.name = Identifier;
+			accept();
+			T.print();
 		}
 		else {
 			switch(peek()) {
+				case('#'):
+					while((peek() != '\n') && !eof())
+					{
+						ignore();
+					}
+					break;
 				case('{'):
 					T.name = Left_Brace;
+					accept();
+					T.print();
 					break;
 				case('}'):
 					T.name = Right_Brace;
+					accept();
+					T.print();
 					break;
 				case('('):
 					T.name = Left_Paren;
+					accept();
+					T.print();
 					break;
 				case(')'):
 					T.name = Right_Paren;
+					accept();
+					T.print();
 					break;
 				case('['):
 					T.name = Left_Bracket;
+					accept();
+					T.print();
 					break;
 				case(']'):
 					T.name = Right_Bracket;
+					accept();
+					T.print();
 					break;
 				case(','):
 					T.name = Comma;
+					accept();
+					T.print();
 					break;
 				case(';'):
 					T.name = Semicolon;
+					accept();
+					T.print();
 					break;					
 				case(':'):
 					T.name = Colon;
+					accept();
+					T.print();
 					break;
 				case('+'):
 					T.name = Arithmetic_Operator;
+					accept();
+					T.print();
 					break;				
 				default:
 					break;
 			}
 		}
-		
-		accept();
-		T.print();
 	}
 }
  
