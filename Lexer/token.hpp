@@ -1,6 +1,8 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
+#include <string>
+
 enum TokenName {
 	Left_Brace,
 	Right_Brace,
@@ -44,6 +46,8 @@ enum TokenName {
 class Token {
 	
 	public:
+		char charVal;
+		std::string strVal;
 		int identifierIndex;
 		TokenName name;
 	private:

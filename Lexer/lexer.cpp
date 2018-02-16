@@ -5,6 +5,7 @@ void Lexer::lex() {
 	std::cout << "You are trying to Lex\n";
 	 
 	while(!eof()) {
+		Token T;
 		lexeme.clear();
 		while(isspace(peek())) {
 			ignore();
@@ -57,9 +58,9 @@ void Lexer::lex() {
 		}
 		else if(isalpha(peek())) {
 			while(isalnum(peek())) {
-				lexeme+=accept();
+				lexeme += accept();
 			}
-			if(matchKeyword()) {
+			if(matchKeyword(T)) {
 				print(T);
 			}
 			else {
@@ -79,7 +80,7 @@ void Lexer::lex() {
 					accept();
 					T.name = Character_Literal;
 					while((peek() != '\'') && (!eof())) {
-						accept();
+						T.charVal = accept();
 					}
 					if(peek() == '\'') {
 						accept();
@@ -90,7 +91,7 @@ void Lexer::lex() {
 					accept();
 					T.name = String_Literal;
 					while((peek() != '\"') && (!eof())) {
-						accept();
+						T.strVal += accept();
 					}
 					if(peek() == '\"') {
 						accept();
@@ -259,11 +260,11 @@ void Lexer::ignore() {
 	file.get();
 }
 
-bool Lexer::matchKeyword() {
+bool Lexer::matchKeyword(Token& t) {
 	it = keywords.begin();
 	while(it != keywords.end()) {
 		if(it->first == lexeme) {
-			T.name = it->second;
+			t.name = it->second;
 			return true;
 		}
 		it++;
@@ -331,7 +332,7 @@ void Lexer::print(Token t) {
 			break;
 		case Keyword_Var: std::cout << "<var>" << "\n";
 			break;
-		case Identifier:std::cout << "<identifier: " << symbols.matchSymbol(T.identifierIndex) << ">\n";
+		case Identifier:std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
 			break;
 		case Decimal_Integer_Literal: std::cout << "<decimal-integer-literal>" << "\n";
 			break;
@@ -343,9 +344,9 @@ void Lexer::print(Token t) {
 			break;
 		case Boolean_Literal: std::cout << "<boolean-literal>" << "\n";
 			break;
-		case Character_Literal: std::cout << "<character-literal>" << "\n";
+		case Character_Literal: std::cout << "<character-literal: '" << t.charVal << "'>\n";
 			break;
-		case String_Literal: std::cout << "<string-literal>" << "\n";
+		case String_Literal: std::cout << "<string-literal: \"" << t.strVal << "\">\n";
 			break;
 	}
 }

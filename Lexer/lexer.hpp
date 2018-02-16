@@ -34,12 +34,11 @@ class Lexer {
 	char peek();
 	char accept();
 	void ignore();
-	bool matchKeyword();
+	bool matchKeyword(Token&);
 	void print(Token);
 	
 	private:
 		std::ifstream file;
-		Token T;
 		Symbols symbols;
 		std::string lexeme;
 		std::map<std::string, TokenName> keywords;
