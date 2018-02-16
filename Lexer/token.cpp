@@ -61,7 +61,7 @@ void Token::print() {
 			break;
 		case Keyword_Var: std::cout << "<var>" << "\n";
 			break;
-		case Identifier: std::cout << "<identifier>" << "\n";
+		case Identifier:std::cout << "<identifier: " << identifierIndex << ">\n";
 			break;
 		case Decimal_Integer_Literal: std::cout << "<decimal-integer-literal>" << "\n";
 			break;

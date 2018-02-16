@@ -1,8 +1,9 @@
 #include "symbols.hpp"
 
-void Symbols::addSymbol(std::string s) {
-	symbolTable.insert(std::make_pair(s, numberOfSymbols));
+int Symbols::addSymbol(std::string s) {
 	numberOfSymbols++;
+	symbolTable.insert(std::make_pair(s, numberOfSymbols));
+	return numberOfSymbols;
 }
 
 int Symbols::matchSymbol(std::string s) {
@@ -14,5 +15,5 @@ int Symbols::matchSymbol(std::string s) {
 		}
 		it++;
 	}
-	return -1;
+	return addSymbol(s);
 }

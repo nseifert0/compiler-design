@@ -34,8 +34,7 @@ class Lexer {
 	char peek();
 	char accept();
 	void ignore();
-	void matchKeyword();
-	void matchToTable();
+	bool matchKeyword();
 	
 	private:
 		std::ifstream file;

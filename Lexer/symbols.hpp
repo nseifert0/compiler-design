@@ -12,7 +12,7 @@ class Symbols {
 		
 		}
 		
-		void addSymbol(std::string);
+		int addSymbol(std::string);
 		int matchSymbol(std::string);
 		
 	private:

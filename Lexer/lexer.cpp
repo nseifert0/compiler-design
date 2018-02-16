@@ -56,12 +56,17 @@ void Lexer::lex() {
 			T.print();
 		}
 		else if(isalpha(peek())) {
-			T.name = Identifier;
 			while(isalnum(peek())) {
 				lexeme+=accept();
 			}
-			matchKeyword();
-			T.print();
+			if(matchKeyword()) {
+				T.print();
+			}
+			else {
+				T.identifierIndex = symbols.matchSymbol(lexeme);
+				T.name = Identifier;
+				T.print();
+			}
 		}
 		else {
 			switch(peek()) {
@@ -238,7 +243,7 @@ void Lexer::ignore() {
 	file.get();
 }
 
-void Lexer::matchKeyword() {
+bool Lexer::matchKeyword() {
 	it = keywords.begin();
 	while(it != keywords.end()) {
 		if(it->first == lexeme) {
@@ -246,9 +251,4 @@ void Lexer::matchKeyword() {
 		}
 		it++;
 	}
-}
-
-void Lexer::matchToTable() {
-	//Check if current Lexeme matches a keyword
-	
 }

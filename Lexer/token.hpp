@@ -44,6 +44,7 @@ enum TokenName {
 class Token {
 	
 	public:
+		int identifierIndex;
 		TokenName name;
 		void print();
 	private:
