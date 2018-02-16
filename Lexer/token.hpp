@@ -43,6 +43,36 @@ enum TokenName {
 	String_Literal
 };
 
+enum RelationalOperatorType {
+	Equal,
+	Not_Equal,
+	Less_Than,
+	Greater_Than,
+	Less_Than_Or_Equal,
+	Greater_Than_Or_Equal
+};
+
+enum ArithmeticOperatorType {
+	Add,
+	Subtract,
+	Multiply,
+	Divide,
+	Modulo
+};
+
+enum BitwiseOperatorType {
+	Bitwise_And,
+	Bitwise_Or,
+	Bitwise_XOr,
+	Bitwise_Complement
+};
+
+enum LogicalOperatorType {
+	And,
+	Or,
+	Not
+};
+
 class Token {
 	
 	public:
@@ -51,6 +81,10 @@ class Token {
 		int integerValue;
 		int identifierIndex;
 		TokenName name;
+		RelationalOperatorType rot;
+		ArithmeticOperatorType aot;
+		BitwiseOperatorType bot;
+		LogicalOperatorType lot;
 	private:
 		
 };

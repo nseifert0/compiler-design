@@ -64,6 +64,20 @@ void Lexer::lex() {
 				lexeme += accept();
 			}
 			if(matchKeyword(T)) {
+				switch(T.name) {
+					case(Keyword_And):
+						T.name = Logical_Operator;
+						T.lot = And;
+						break;
+					case(Keyword_Or):
+						T.name = Logical_Operator;
+						T.lot = Or;
+						break;
+					case(Keyword_Not):
+						T.name = Logical_Operator;
+						T.lot = Not;
+						break;
+				}
 				print(T);
 			}
 			else {
@@ -277,79 +291,119 @@ bool Lexer::matchKeyword(Token& t) {
 
 void Lexer::print(Token t) {
 	switch(t.name) {
-		case Left_Brace: std::cout << "<left-brace>" << "\n";
+		case Left_Brace:
+			std::cout << "<left-brace>" << "\n";
 			break;
-		case Right_Brace: std::cout << "<right-brace>" << "\n";
+		case Right_Brace:
+			std::cout << "<right-brace>" << "\n";
 			break;
-		case Left_Paren: std::cout << "<left-paren>" << "\n";
+		case Left_Paren:
+			std::cout << "<left-paren>" << "\n";
 			break;
-		case Right_Paren: std::cout << "<right-paren>" << "\n";
+		case Right_Paren:
+			std::cout << "<right-paren>" << "\n";
 			break;
-		case Left_Bracket: std::cout << "<left-bracket>" << "\n";
+		case Left_Bracket:
+			std::cout << "<left-bracket>" << "\n";
 			break;
-		case Right_Bracket: std::cout << "<right-bracket>" << "\n";
+		case Right_Bracket:
+			std::cout << "<right-bracket>" << "\n";
 			break;
-		case Comma: std::cout << "<comma>" << "\n";
+		case Comma:
+			std::cout << "<comma>" << "\n";
 			break;
-		case Semicolon: std::cout << "<semicolon>" << "\n";
+		case Semicolon:
+			std::cout << "<semicolon>" << "\n";
 			break;
-		case Colon: std::cout << "<colon>" << "\n";
+		case Colon:
+			std::cout << "<colon>" << "\n";
 			break;
-		case Relational_Operator: std::cout << "<relational-operator>" << "\n";
+		case Relational_Operator:
+			std::cout << "<relational-operator>" << "\n";
 			break;
-		case Arithmetic_Operator: std::cout << "<arithmetic-operator>" << "\n";
+		case Arithmetic_Operator:
+			std::cout << "<arithmetic-operator>" << "\n";
 			break;
-		case Bitwise_Operator: std::cout << "<bitwise-operator>" << "\n";
+		case Bitwise_Operator:
+			std::cout << "<bitwise-operator>" << "\n";
 			break;
-		case Logical_Operator: std::cout << "<logical-operator>" << "\n";
+		case Logical_Operator:
+			std::cout << "<logical-operator: "; 
+			switch(t.lot) {
+				case(And):
+					std::cout << "and";
+					break;
+				case(Or):
+					std::cout << "or";
+					break;
+				case(Not):
+					std::cout << "not";
+					break;
+			}
+			std::cout << ">\n";
 			break;
-		case Conditional_Operator: std::cout << "<conditional-operator>" << "\n";
+		case Conditional_Operator:
+			std::cout << "<conditional-operator>" << "\n";
 			break;
-		case Assignment_Operator: std::cout << "<assignment-operator>" << "\n";
+		case Assignment_Operator:
+			std::cout << "<assignment-operator>" << "\n";
 			break;
-		case Keyword_And: std::cout << "<and>" << "\n";
+		case Keyword_Bool:
+			std::cout << "<bool>" << "\n";
 			break;
-		case Keyword_Bool: std::cout << "<bool>" << "\n";
+		case Keyword_Char:
+			std::cout << "<char>" << "\n";
 			break;
-		case Keyword_Char: std::cout << "<char>" << "\n";
+		case Keyword_Def:
+			std::cout << "<def>" << "\n";
 			break;
-		case Keyword_Def: std::cout << "<def>" << "\n";
+		case Keyword_Else:
+			std::cout << "<else>" << "\n";
 			break;
-		case Keyword_Else: std::cout << "<else>" << "\n";
+		case Keyword_False:
+			std::cout << "<false>" << "\n";
 			break;
-		case Keyword_False: std::cout << "<false>" << "\n";
+		case Keyword_Float:
+			std::cout << "<float>" << "\n";
 			break;
-		case Keyword_Float: std::cout << "<float>" << "\n";
+		case Keyword_If:
+			std::cout << "<if>" << "\n";
 			break;
-		case Keyword_If: std::cout << "<if>" << "\n";
+		case Keyword_Int:
+			std::cout << "<int>" << "\n";
 			break;
-		case Keyword_Int: std::cout << "<int>" << "\n";
+		case Keyword_Let:
+			std::cout << "<let>" << "\n";
 			break;
-		case Keyword_Let: std::cout << "<let>" << "\n";
+		case Keyword_True:
+			std::cout << "<true>" << "\n";
 			break;
-		case Keyword_Not: std::cout << "<not>" << "\n";
+		case Keyword_Var:
+			std::cout << "<var>" << "\n";
 			break;
-		case Keyword_Or: std::cout << "<or>" << "\n";
+		case Identifier:
+			std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
 			break;
-		case Keyword_True: std::cout << "<true>" << "\n";
+		case Decimal_Integer_Literal:
+			std::cout << "<decimal-integer-literal>" << "\n";
 			break;
-		case Keyword_Var: std::cout << "<var>" << "\n";
+		case Hexadecimal_Integer_Literal:
+			std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";
 			break;
-		case Identifier:std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
+		case Binary_Integer_Literal:
+			std::cout << "<binary-integer-literal: 0b"; printAsBinary(t.integerValue); std::cout << ">\n";
 			break;
-		case Decimal_Integer_Literal: std::cout << "<decimal-integer-literal>" << "\n";
+		case Floating_Point_Literal:
+			std::cout << "<floating-point-literal>" << "\n";
 			break;
-		case Hexadecimal_Integer_Literal: std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";
+		case Boolean_Literal:
+			std::cout << "<boolean-literal>" << "\n";
 			break;
-		case Binary_Integer_Literal: std::cout << "<binary-integer-literal: 0b"; printAsBinary(t.integerValue); std::cout << ">\n";
+		case Character_Literal:
+			std::cout << "<character-literal: '" << t.charVal << "'>\n";
 			break;
-		case Floating_Point_Literal: std::cout << "<floating-point-literal>" << "\n";
-			break;
-		case Boolean_Literal: std::cout << "<boolean-literal>" << "\n";
-			break;
-		case Character_Literal: std::cout << "<character-literal: '" << t.charVal << "'>\n";
-			break;
-		case String_Literal: std::cout << "<string-literal: \"" << t.strVal << "\">\n";
+		case String_Literal:
+			std::cout << "<string-literal: \"" << t.strVal << "\">\n";
 			break;
 	}
 }
