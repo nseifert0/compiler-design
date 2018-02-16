@@ -40,6 +40,7 @@ class Lexer {
 	private:
 		std::ifstream file;
 		Token T;
+		Symbols symbols;
 		std::string lexeme;
 		std::map<std::string, TokenName> keywords;
 		std::map<std::string, TokenName>::iterator it;
