@@ -121,23 +121,43 @@ void Lexer::lex() {
 					T.print();
 					break;
 				case('='):
-					T.name = Assignment_Operator;
 					accept();
+					if(peek() == '=')
+					{
+						accept();
+						T.name = Relational_Operator;
+					}
+					else
+					{
+					T.name = Assignment_Operator;
+					}
 					T.print();
 					break;
 				case('!'):
 					T.name = Relational_Operator;
 					accept();
+					if(peek() == '=') {
+						accept();
+					}
+					else {
+						//Throw error
+					}
 					T.print();
 					break;
 				case('<'):
 					T.name = Relational_Operator;
 					accept();
+					if(peek() == '=') {
+						accept();
+					}
 					T.print();
 					break;
 				case('>'):
 					T.name = Relational_Operator;
 					accept();
+					if(peek() == '=') {
+						accept();
+					}
 					T.print();
 					break;
 				case('+'):

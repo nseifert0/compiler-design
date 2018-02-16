@@ -1,7 +1,7 @@
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 
-enum Name {
+enum TokenName {
 	Left_Brace,
 	Right_Brace,
 	Left_Paren,
@@ -44,7 +44,7 @@ enum Name {
 class Token {
 	
 	public:
-		Name name;
+		TokenName name;
 		void print();
 	private:
 		
