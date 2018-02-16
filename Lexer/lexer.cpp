@@ -1,5 +1,6 @@
 #include "lexer.hpp"
 #include <iostream>
+#include <bitset>
 
 void Lexer::lex() {
 	std::cout << "You are trying to Lex\n";
@@ -23,7 +24,7 @@ void Lexer::lex() {
 					while(isxdigit(peek())) {
 						lexeme+=accept();
 					}
-					T.integerValue = std::stoi (lexeme,nullptr,16);
+					T.integerValue = std::stoi(lexeme,nullptr,16);
 					break;
 				case('b'):
 				case('B'):
@@ -32,7 +33,7 @@ void Lexer::lex() {
 					while((peek() == '0') || (peek() == '1')) {
 						lexeme+=accept();
 					}
-					T.integerValue = std::stoi (lexeme,nullptr,2);
+					T.integerValue = std::stoi(lexeme,nullptr,2);
 					break;
 				default:
 					while(isdigit(peek())) {
@@ -340,7 +341,7 @@ void Lexer::print(Token t) {
 			break;
 		case Hexadecimal_Integer_Literal: std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";
 			break;
-		case Binary_Integer_Literal: std::cout << "<binary-integer-literal>" << "\n";
+		case Binary_Integer_Literal: std::cout << "<binary-integer-literal: 0b"; printAsBinary(t.integerValue); std::cout << ">\n";
 			break;
 		case Floating_Point_Literal: std::cout << "<floating-point-literal>" << "\n";
 			break;
@@ -351,4 +352,13 @@ void Lexer::print(Token t) {
 		case String_Literal: std::cout << "<string-literal: \"" << t.strVal << "\">\n";
 			break;
 	}
+}
+
+void Lexer::printAsBinary(int val) {
+	std::string s = "";
+	while(val > 0) {
+		s = std::to_string(val % 2) + s;
+		val = val/2;
+	}
+	std::cout << s;
 }

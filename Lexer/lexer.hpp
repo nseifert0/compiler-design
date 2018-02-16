@@ -36,6 +36,7 @@ class Lexer {
 	void ignore();
 	bool matchKeyword(Token&);
 	void print(Token);
+	void printAsBinary(int);
 	
 	private:
 		std::ifstream file;
