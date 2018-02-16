@@ -48,6 +48,7 @@ class Token {
 	public:
 		char charVal;
 		std::string strVal;
+		int integerValue;
 		int identifierIndex;
 		TokenName name;
 	private:

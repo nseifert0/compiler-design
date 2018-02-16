@@ -21,16 +21,18 @@ void Lexer::lex() {
 					T.name = Hexadecimal_Integer_Literal;
 					accept();
 					while(isxdigit(peek())) {
-						accept();
+						lexeme+=accept();
 					}
+					T.integerValue = std::stoi (lexeme,nullptr,16);
 					break;
 				case('b'):
 				case('B'):
 					T.name = Binary_Integer_Literal;
 					accept();
 					while((peek() == '0') || (peek() == '1')) {
-						accept();
-					}						
+						lexeme+=accept();
+					}
+					T.integerValue = std::stoi (lexeme,nullptr,2);
 					break;
 				default:
 					while(isdigit(peek())) {
@@ -336,7 +338,7 @@ void Lexer::print(Token t) {
 			break;
 		case Decimal_Integer_Literal: std::cout << "<decimal-integer-literal>" << "\n";
 			break;
-		case Hexadecimal_Integer_Literal: std::cout << "<hexadecimal-integer-literal>" << "\n";
+		case Hexadecimal_Integer_Literal: std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";
 			break;
 		case Binary_Integer_Literal: std::cout << "<binary-integer-literal>" << "\n";
 			break;
