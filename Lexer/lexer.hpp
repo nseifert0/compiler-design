@@ -35,6 +35,7 @@ class Lexer {
 	char accept();
 	void ignore();
 	bool matchKeyword();
+	void print(Token);
 	
 	private:
 		std::ifstream file;
