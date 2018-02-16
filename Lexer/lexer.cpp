@@ -166,10 +166,11 @@ void Lexer::lex() {
 					{
 						accept();
 						T.name = Relational_Operator;
+						T.rot = Equal;
 					}
 					else
 					{
-					T.name = Assignment_Operator;
+						T.name = Assignment_Operator;
 					}
 					print(T);
 					break;
@@ -178,6 +179,7 @@ void Lexer::lex() {
 					accept();
 					if(peek() == '=') {
 						accept();
+						T.rot = Not_Equal;
 					}
 					else {
 						//Throw error
@@ -187,61 +189,74 @@ void Lexer::lex() {
 				case('<'):
 					T.name = Relational_Operator;
 					accept();
+					T.rot = Less_Than;
 					if(peek() == '=') {
 						accept();
+						T.rot = Less_Than_Or_Equal;
 					}
 					print(T);
 					break;
 				case('>'):
 					T.name = Relational_Operator;
 					accept();
+					T.rot = Greater_Than;
 					if(peek() == '=') {
+						T.rot = Greater_Than_Or_Equal;
 						accept();
 					}
 					print(T);
 					break;
 				case('+'):
 					T.name = Arithmetic_Operator;
+					T.aot = Add;
 					accept();
 					print(T);
 					break;
 				case('-'):
 					T.name = Arithmetic_Operator;
+					T.aot = Subtract;
 					accept();
 					print(T);
 					break;
 				case('*'):
 					T.name = Arithmetic_Operator;
+					T.aot = Multiply;
 					accept();
 					print(T);
 					break;
 				case('/'):
 					T.name = Arithmetic_Operator;
+					T.aot = Divide;
 					accept();
 					print(T);
 					break;
 				case('%'):
 					T.name = Arithmetic_Operator;
+					T.aot = Modulo;
 					accept();
 					print(T);
 					break;
 				case('&'):
 					T.name = Bitwise_Operator;
+					T.bot = Bitwise_And;
 					accept();
 					print(T);
 					break;
 				case('|'):
 					T.name = Bitwise_Operator;
+					T.bot = Bitwise_Or;
 					accept();
 					print(T);
 					break;
 				case('^'):
 					T.name = Bitwise_Operator;
+					T.bot = Bitwise_XOr;
 					accept();
 					print(T);
 					break;
 				case('~'):
 					T.name = Bitwise_Operator;
+					T.bot = Bitwise_Complement;
 					accept();
 					print(T);
 					break;
@@ -319,13 +334,67 @@ void Lexer::print(Token t) {
 			std::cout << "<colon>" << "\n";
 			break;
 		case Relational_Operator:
-			std::cout << "<relational-operator>" << "\n";
+			std::cout << "<relational-operator "; 
+			switch(t.rot) {
+				case(Equal):
+					std::cout << "equal";
+					break;
+				case(Not_Equal):
+					std::cout << "not-equal";
+					break;
+				case(Less_Than):
+					std::cout << "less-than";
+					break;
+				case(Greater_Than):
+					std::cout << "greater-than";
+					break;
+				case(Less_Than_Or_Equal):
+					std::cout << "less-than-or-equal";
+					break;
+				case(Greater_Than_Or_Equal):
+					std::cout << "greater-than-or-equal";
+					break;
+			}
+			std::cout << ">\n";
 			break;
 		case Arithmetic_Operator:
-			std::cout << "<arithmetic-operator>" << "\n";
+			std::cout << "<arithmetic-operator "; 
+			switch(t.aot) {
+				case(Add):
+					std::cout << "add";
+					break;
+				case(Subtract):
+					std::cout << "subtract";
+					break;
+				case(Multiply):
+					std::cout << "multiply";
+					break;
+				case(Divide):
+					std::cout << "divide";
+					break;
+				case(Modulo):
+					std::cout << "modulo";
+					break;
+			}
+			std::cout << ">\n";
 			break;
 		case Bitwise_Operator:
-			std::cout << "<bitwise-operator>" << "\n";
+			std::cout << "<bitwise-operator "; 
+			switch(t.bot) {
+				case(Bitwise_And):
+					std::cout << "bitwise-and";
+					break;
+				case(Bitwise_Or):
+					std::cout << "bitwise-or";
+					break;
+				case(Bitwise_XOr):
+					std::cout << "bitwise-xor";
+					break;
+				case(Bitwise_Complement):
+					std::cout << "bitwise-complement";
+					break;
+			}
+			std::cout << ">\n";
 			break;
 		case Logical_Operator:
 			std::cout << "<logical-operator: "; 
