@@ -5,6 +5,7 @@ void Lexer::lex() {
 	std::cout << "You are trying to Lex\n";
 	 
 	while(!eof()) {
+		lexeme.clear();
 		while(isspace(peek())) {
 			ignore();
 		}
@@ -57,9 +58,9 @@ void Lexer::lex() {
 		else if(isalpha(peek())) {
 			T.name = Identifier;
 			while(isalnum(peek())) {
-				accept();
+				lexeme+=accept();
 			}
-			matchToTable();
+			matchKeyword();
 			T.print();
 		}
 		else {
@@ -227,14 +228,24 @@ char Lexer::peek() {
 	return file.peek();
 }
  
-void Lexer::accept() {
+char Lexer::accept() {
 	// Add character to current token
-	file.get();
+	return file.get();
 }
  
 void Lexer::ignore() {
 	// Get character and do nothing with it
 	file.get();
+}
+
+void Lexer::matchKeyword() {
+	it = keywords.begin();
+	while(it != keywords.end()) {
+		if(it->first == lexeme) {
+			T.name = it->second;
+		}
+		it++;
+	}
 }
 
 void Lexer::matchToTable() {
