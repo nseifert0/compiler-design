@@ -14,6 +14,7 @@ class Symbols {
 		
 		int addSymbol(std::string);
 		int matchSymbol(std::string);
+		std::string matchSymbol(int);
 		
 	private:
 		std::map<std::string, int> symbolTable;

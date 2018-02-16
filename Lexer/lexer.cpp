@@ -248,9 +248,11 @@ bool Lexer::matchKeyword() {
 	while(it != keywords.end()) {
 		if(it->first == lexeme) {
 			T.name = it->second;
+			return true;
 		}
 		it++;
 	}
+	return false;
 }
 
 void Lexer::print(Token t) {
@@ -313,7 +315,7 @@ void Lexer::print(Token t) {
 			break;
 		case Keyword_Var: std::cout << "<var>" << "\n";
 			break;
-		case Identifier:std::cout << "<identifier: " << T.identifierIndex << ">\n";
+		case Identifier:std::cout << "<identifier: " << symbols.matchSymbol(T.identifierIndex) << ">\n";
 			break;
 		case Decimal_Integer_Literal: std::cout << "<decimal-integer-literal>" << "\n";
 			break;
