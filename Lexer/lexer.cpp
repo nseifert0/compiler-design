@@ -76,10 +76,26 @@ void Lexer::lex() {
 					}
 					break;
 				case('\''):
-					
+					accept();
+					T.name = Character_Literal;
+					while((peek() != '\'') && (!eof())) {
+						accept();
+					}
+					if(peek() == '\'') {
+						accept();
+					}
+					print(T);
 					break;
 				case('\"'):
-				
+					accept();
+					T.name = String_Literal;
+					while((peek() != '\"') && (!eof())) {
+						accept();
+					}
+					if(peek() == '\"') {
+						accept();
+					}
+					print(T);
 					break;
 				case('{'):
 					T.name = Left_Brace;
