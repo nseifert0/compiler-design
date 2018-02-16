@@ -13,7 +13,7 @@ class Symbols {
 		}
 		
 		void addSymbol(std::string);
-		void matchSymbol(std::string);
+		int matchSymbol(std::string);
 		
 	private:
 		std::map<std::string, int> symbolTable;
