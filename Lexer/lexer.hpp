@@ -2,6 +2,7 @@
 #define LEXER_HPP
 
 #include "token.hpp"
+#include "symbols.hpp"
 
 #include <fstream>
 #include <map>
