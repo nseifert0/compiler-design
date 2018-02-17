@@ -102,11 +102,53 @@ Token Lexer::lex() {
 			case('\''):
 				accept();
 				T.name = Character_Literal;
+				if(peek() == '\\') {
+					accept();
+					switch(peek()) {
+						case('\''):
+							T.charVal = '\'';
+							break;
+						case('\"'):
+							T.charVal = '\"';
+							break;
+						case('\\'):
+							T.charVal = '\\';
+							break;
+						case('a'):
+							T.charVal = '\a';
+							break;
+						case('b'):
+							T.charVal = '\b';
+							break;
+						case('f'):
+							T.charVal = '\f';
+							break;
+						case('n'):
+							T.charVal = '\n';
+							break;
+						case('r'):
+							T.charVal = '\r';
+							break;
+						case('t'):
+							T.charVal = '\t';
+							break;
+						case('v'):
+							T.charVal = '\v';
+							break;
+						default:
+							//throw error
+							break;
+					}
+					accept();
+				}
 				while((peek() != '\'') && (!eof())) {
 					T.charVal = accept();
 				}
 				if(peek() == '\'') {
 					accept();
+				}
+				else{
+					//throw error
 				}
 				break;
 			case('\"'):
@@ -459,7 +501,43 @@ void Lexer::print(Token t) {
 			std::cout << ">\n";
 			break;
 		case Character_Literal:
-			std::cout << "<character-literal: '" << t.charVal << "'>\n";
+			std::cout << "<character-literal: '"; 
+			switch(t.charVal) {
+				case('\''):
+					std::cout << "\\'";
+					break;
+				case('\"'):
+					std::cout << "\\\"";
+					break;
+				case('\\'):
+					std::cout << "\\\\";
+					break;
+				case('\a'):
+					std::cout << "\\a";
+					break;
+				case('\b'):
+					std::cout << "\\b";
+					break;
+				case('\f'):
+					std::cout << "\\f";
+					break;
+				case('\n'):
+					std::cout << "\\n";
+					break;
+				case('\r'):
+					std::cout << "\\r";
+					break;
+				case('\t'):
+					std::cout << "\\t";
+					break;
+				case('\v'):
+					std::cout << "\\v";
+					break;
+				default:
+					std::cout << t.charVal << "'>\n";
+					break;
+			}
+			std::cout << "'>\n";
 			break;
 		case String_Literal:
 			std::cout << "<string-literal: \"" << t.strVal << "\">\n";
