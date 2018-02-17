@@ -40,19 +40,20 @@ void Lexer::lex() {
 					}
 					if(peek() == '.') {
 						T.name = Floating_Point_Literal;
-						accept();
+						lexeme+=accept();
 						while(isdigit(peek())) {
-							accept();
+							lexeme+=accept();
 						}
 						if((peek() == 'E') || (peek() == 'e')) {
-							accept();
+							lexeme+=accept();
 							if((peek() == '+') || (peek() == '-')) {
-								accept();
+								lexeme+=accept();
 							}
 						}
 						while(isdigit(peek())) {
-							accept();
+							lexeme+=accept();
 						}
+						T.floatValue = std::stod(lexeme);
 					}
 					else {
 						T.name = Decimal_Integer_Literal;
@@ -457,16 +458,16 @@ void Lexer::print(Token t) {
 			std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
 			break;
 		case Decimal_Integer_Literal:
-			std::cout << "<decimal-integer-literal " << t.integerValue <<">\n";
+			std::cout << "<decimal-integer-literal " << t.integerValue << ">\n";
 			break;
 		case Hexadecimal_Integer_Literal:
-			std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";
+			std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue << ">\n";
 			break;
 		case Binary_Integer_Literal:
 			std::cout << "<binary-integer-literal: 0b"; printAsBinary(t.integerValue); std::cout << ">\n";
 			break;
 		case Floating_Point_Literal:
-			std::cout << "<floating-point-literal>" << "\n";
+			std::cout << "<floating-point-literal: " << t.floatValue << ">\n";
 			break;
 		case Boolean_Literal:
 			std::cout << "<boolean-literal>" << "\n";
