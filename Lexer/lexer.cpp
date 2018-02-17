@@ -88,7 +88,7 @@ Token Lexer::lex() {
 			}
 		}
 		else {
-			t.identifierIndex = symbols.matchSymbol(lexeme);
+			t.symbolTableIndex = symbols.matchSymbol(lexeme);
 			t.name = Identifier;
 		}
 	}
@@ -159,7 +159,8 @@ Token Lexer::lex() {
 				accept();
 				t.name = String_Literal;
 				while((peek() != '\"') && (!eof())) {
-					t.strVal += accept();
+					lexeme += accept();
+					t.symbolTableIndex = symbols.matchSymbol(lexeme);
 				}
 				if(peek() == '\"') {
 					accept();
@@ -478,7 +479,7 @@ void Lexer::print(Token t) {
 			std::cout << "<var>" << "\n";
 			break;
 		case Identifier:
-			std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
+			std::cout << "<identifier: " << symbols.matchSymbol(t.symbolTableIndex) << ">\n";
 			break;
 		case Decimal_Integer_Literal:
 			std::cout << "<decimal-integer-literal " << t.integerValue << ">\n";
@@ -544,7 +545,7 @@ void Lexer::print(Token t) {
 			std::cout << "'>\n";
 			break;
 		case String_Literal:
-			std::cout << "<string-literal: \"" << t.strVal << "\">\n";
+			std::cout << "<string-literal: \"" << symbols.matchSymbol(t.symbolTableIndex) << "\">\n";
 			break;
 	}
 }

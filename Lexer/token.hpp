@@ -87,7 +87,7 @@ class Token {
 			char charVal;		
 			int integerValue;
 			double floatValue;
-			int identifierIndex;
+			int symbolTableIndex;
 			RelationalOperatorType rot;
 			ArithmeticOperatorType aot;
 			BitwiseOperatorType bot;
