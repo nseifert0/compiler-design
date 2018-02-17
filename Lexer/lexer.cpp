@@ -9,6 +9,7 @@ Token Lexer::lex() {
 	while(isspace(peek())) {
 		ignore();
 	}
+	t.location = file.tellg();
 	if(isdigit(peek())) {
 		if(peek() == '0') {
 			accept();

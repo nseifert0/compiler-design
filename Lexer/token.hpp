@@ -81,7 +81,7 @@ enum BooleanLiteralType {
 class Token {	
 	public:
 		TokenName name;
-		std::string strVal;
+		int location;
 		
 		union {
 			char charVal;		
