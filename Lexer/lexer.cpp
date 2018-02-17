@@ -80,6 +80,14 @@ void Lexer::lex() {
 						T.name = Logical_Operator;
 						T.lot = Not;
 						break;
+					case(Keyword_True):
+						T.name = Boolean_Literal;
+						T.blt = True;
+						break;
+					case(Keyword_False):
+						T.name = Boolean_Literal;
+						T.blt = False;
+						break;						
 				}
 			}
 			else {
@@ -443,7 +451,16 @@ void Lexer::print(Token t) {
 			std::cout << "<floating-point-literal: " << t.floatValue << ">\n";
 			break;
 		case Boolean_Literal:
-			std::cout << "<boolean-literal>" << "\n";
+			std::cout << "<boolean-literal: "; 
+			switch(t.blt) {
+				case(True):
+					std::cout << "true";
+					break;
+				case(False):
+					std::cout << "false";
+					break;
+			}
+			std::cout << ">\n";
 			break;
 		case Character_Literal:
 			std::cout << "<character-literal: '" << t.charVal << "'>\n";

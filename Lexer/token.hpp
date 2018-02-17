@@ -73,6 +73,11 @@ enum LogicalOperatorType {
 	Not
 };
 
+enum BooleanLiteralType {
+	True,
+	False
+};
+
 class Token {
 	
 	public:
@@ -86,6 +91,7 @@ class Token {
 		ArithmeticOperatorType aot;
 		BitwiseOperatorType bot;
 		LogicalOperatorType lot;
+		BooleanLiteralType blt;
 	private:
 		
 };
