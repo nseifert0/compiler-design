@@ -78,22 +78,26 @@ enum BooleanLiteralType {
 	False
 };
 
-class Token {
-	
+class Token {	
 	public:
-		char charVal;
-		std::string strVal;
-		int integerValue;
-		double floatValue;
-		int identifierIndex;
 		TokenName name;
-		RelationalOperatorType rot;
-		ArithmeticOperatorType aot;
-		BitwiseOperatorType bot;
-		LogicalOperatorType lot;
-		BooleanLiteralType blt;
+		std::string strVal;
+		
+		union {
+			char charVal;		
+			int integerValue;
+			double floatValue;
+			int identifierIndex;
+			RelationalOperatorType rot;
+			ArithmeticOperatorType aot;
+			BitwiseOperatorType bot;
+			LogicalOperatorType lot;
+			BooleanLiteralType blt;
+		};
+		
 	private:
 		
 };
+
 
 #endif

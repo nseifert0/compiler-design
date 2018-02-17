@@ -141,6 +141,10 @@ Token Lexer::lex() {
 					}
 					accept();
 				}
+				if((peek() == '\''))
+				{
+					//throw empty character error;
+				}
 				while((peek() != '\'') && (!eof())) {
 					t.charVal = accept();
 				}
