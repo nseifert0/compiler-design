@@ -12,7 +12,6 @@ void Lexer::lex() {
 			ignore();
 		}
 		if(isdigit(peek())) {
-			T.name = Decimal_Integer_Literal;
 			if(peek() == '0') {
 				accept();
 			}
@@ -37,7 +36,7 @@ void Lexer::lex() {
 					break;
 				default:
 					while(isdigit(peek())) {
-						accept();
+						lexeme+=accept();
 					}
 					if(peek() == '.') {
 						T.name = Floating_Point_Literal;
@@ -55,12 +54,16 @@ void Lexer::lex() {
 							accept();
 						}
 					}
+					else {
+						T.name = Decimal_Integer_Literal;
+						T.integerValue = std::stoi(lexeme,nullptr,10);
+					}
 					break;
 			}
 			print(T);
 		}
 		else if(isalpha(peek())) {
-			while(isalnum(peek())) {
+			while(isalnum(peek()) || peek() == '_') {
 				lexeme += accept();
 			}
 			if(matchKeyword(T)) {
@@ -454,7 +457,7 @@ void Lexer::print(Token t) {
 			std::cout << "<identifier: " << symbols.matchSymbol(t.identifierIndex) << ">\n";
 			break;
 		case Decimal_Integer_Literal:
-			std::cout << "<decimal-integer-literal>" << "\n";
+			std::cout << "<decimal-integer-literal " << t.integerValue <<">\n";
 			break;
 		case Hexadecimal_Integer_Literal:
 			std::cout << "<hexadecimal-integer-literal: 0x" << std::hex << t.integerValue <<">\n";

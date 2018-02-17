@@ -79,6 +79,7 @@ class Token {
 		char charVal;
 		std::string strVal;
 		int integerValue;
+		double floatValue;
 		int identifierIndex;
 		TokenName name;
 		RelationalOperatorType rot;
