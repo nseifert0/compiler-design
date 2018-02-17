@@ -2,259 +2,255 @@
 #include <iostream>
 #include <bitset>
 
-void Lexer::lex() {
-	std::cout << "You are trying to Lex\n";
-	 
-	while(!eof()) {
-		Token T;
-		lexeme.clear();
-		while(isspace(peek())) {
-			ignore();
+Token Lexer::lex() {
+	Token T;
+	lexeme.clear();
+	while(isspace(peek())) {
+		ignore();
+	}
+	if(isdigit(peek())) {
+		if(peek() == '0') {
+			accept();
 		}
-		if(isdigit(peek())) {
-			if(peek() == '0') {
+		switch(peek()) {
+			case('x'):
+			case('X'):
+				T.name = Hexadecimal_Integer_Literal;
 				accept();
-			}
-			switch(peek()) {
-				case('x'):
-				case('X'):
-					T.name = Hexadecimal_Integer_Literal;
-					accept();
-					while(isxdigit(peek())) {
-						lexeme+=accept();
-					}
-					T.integerValue = std::stoi(lexeme,nullptr,16);
-					break;
-				case('b'):
-				case('B'):
-					T.name = Binary_Integer_Literal;
-					accept();
-					while((peek() == '0') || (peek() == '1')) {
-						lexeme+=accept();
-					}
-					T.integerValue = std::stoi(lexeme,nullptr,2);
-					break;
-				default:
+				while(isxdigit(peek())) {
+					lexeme+=accept();
+				}
+				T.integerValue = std::stoi(lexeme,nullptr,16);
+				break;
+			case('b'):
+			case('B'):
+				T.name = Binary_Integer_Literal;
+				accept();
+				while((peek() == '0') || (peek() == '1')) {
+					lexeme+=accept();
+				}
+				T.integerValue = std::stoi(lexeme,nullptr,2);
+				break;
+			default:
+				while(isdigit(peek())) {
+					lexeme+=accept();
+				}
+				if(peek() == '.') {
+					T.name = Floating_Point_Literal;
+					lexeme+=accept();
 					while(isdigit(peek())) {
 						lexeme+=accept();
 					}
-					if(peek() == '.') {
-						T.name = Floating_Point_Literal;
+					if((peek() == 'E') || (peek() == 'e')) {
 						lexeme+=accept();
-						while(isdigit(peek())) {
+						if((peek() == '+') || (peek() == '-')) {
 							lexeme+=accept();
 						}
-						if((peek() == 'E') || (peek() == 'e')) {
-							lexeme+=accept();
-							if((peek() == '+') || (peek() == '-')) {
-								lexeme+=accept();
-							}
-						}
-						while(isdigit(peek())) {
-							lexeme+=accept();
-						}
-						T.floatValue = std::stod(lexeme);
 					}
-					else {
-						T.name = Decimal_Integer_Literal;
-						T.integerValue = std::stoi(lexeme,nullptr,10);
+					while(isdigit(peek())) {
+						lexeme+=accept();
 					}
-					break;
-			}
-		}
-		else if(isalpha(peek())) {
-			while(isalnum(peek()) || peek() == '_') {
-				lexeme += accept();
-			}
-			if(matchKeyword(T)) {
-				switch(T.name) {
-					case(Keyword_And):
-						T.name = Logical_Operator;
-						T.lot = And;
-						break;
-					case(Keyword_Or):
-						T.name = Logical_Operator;
-						T.lot = Or;
-						break;
-					case(Keyword_Not):
-						T.name = Logical_Operator;
-						T.lot = Not;
-						break;
-					case(Keyword_True):
-						T.name = Boolean_Literal;
-						T.blt = True;
-						break;
-					case(Keyword_False):
-						T.name = Boolean_Literal;
-						T.blt = False;
-						break;						
+					T.floatValue = std::stod(lexeme);
 				}
-			}
-			else {
-				T.identifierIndex = symbols.matchSymbol(lexeme);
-				T.name = Identifier;
+				else {
+					T.name = Decimal_Integer_Literal;
+					T.integerValue = std::stoi(lexeme,nullptr,10);
+				}
+				break;
+		}
+	}
+	else if(isalpha(peek())) {
+		while(isalnum(peek()) || peek() == '_') {
+			lexeme += accept();
+		}
+		if(matchKeyword(T)) {
+			switch(T.name) {
+				case(Keyword_And):
+					T.name = Logical_Operator;
+					T.lot = And;
+					break;
+				case(Keyword_Or):
+					T.name = Logical_Operator;
+					T.lot = Or;
+					break;
+				case(Keyword_Not):
+					T.name = Logical_Operator;
+					T.lot = Not;
+					break;
+				case(Keyword_True):
+					T.name = Boolean_Literal;
+					T.blt = True;
+					break;
+				case(Keyword_False):
+					T.name = Boolean_Literal;
+					T.blt = False;
+					break;						
 			}
 		}
 		else {
-			switch(peek()) {
-				case('#'):
-					while((peek() != '\n') && (!eof())) {
-						ignore();
-					}
-					break;
-				case('\''):
-					accept();
-					T.name = Character_Literal;
-					while((peek() != '\'') && (!eof())) {
-						T.charVal = accept();
-					}
-					if(peek() == '\'') {
-						accept();
-					}
-					break;
-				case('\"'):
-					accept();
-					T.name = String_Literal;
-					while((peek() != '\"') && (!eof())) {
-						T.strVal += accept();
-					}
-					if(peek() == '\"') {
-						accept();
-					}
-					break;
-				case('{'):
-					T.name = Left_Brace;
-					accept();
-					break;
-				case('}'):
-					T.name = Right_Brace;
-					accept();
-					break;
-				case('('):
-					T.name = Left_Paren;
-					accept();
-					break;
-				case(')'):
-					T.name = Right_Paren;
-					accept();
-					break;
-				case('['):
-					T.name = Left_Bracket;
-					accept();
-					break;
-				case(']'):
-					T.name = Right_Bracket;
-					accept();
-					break;
-				case(','):
-					T.name = Comma;
-					accept();
-					break;
-				case(';'):
-					T.name = Semicolon;
-					accept();
-					break;					
-				case(':'):
-					T.name = Colon;
-					accept();
-					break;
-				case('='):
-					accept();
-					if(peek() == '=')
-					{
-						accept();
-						T.name = Relational_Operator;
-						T.rot = Equal;
-					}
-					else
-					{
-						T.name = Assignment_Operator;
-					}
-					break;
-				case('!'):
-					T.name = Relational_Operator;
-					accept();
-					if(peek() == '=') {
-						accept();
-						T.rot = Not_Equal;
-					}
-					else {
-						//Throw error
-					}
-					break;
-				case('<'):
-					T.name = Relational_Operator;
-					accept();
-					T.rot = Less_Than;
-					if(peek() == '=') {
-						accept();
-						T.rot = Less_Than_Or_Equal;
-					}
-					break;
-				case('>'):
-					T.name = Relational_Operator;
-					accept();
-					T.rot = Greater_Than;
-					if(peek() == '=') {
-						T.rot = Greater_Than_Or_Equal;
-						accept();
-					}
-					break;
-				case('+'):
-					T.name = Arithmetic_Operator;
-					T.aot = Add;
-					accept();
-					break;
-				case('-'):
-					T.name = Arithmetic_Operator;
-					T.aot = Subtract;
-					accept();
-					break;
-				case('*'):
-					T.name = Arithmetic_Operator;
-					T.aot = Multiply;
-					accept();
-					break;
-				case('/'):
-					T.name = Arithmetic_Operator;
-					T.aot = Divide;
-					accept();
-					break;
-				case('%'):
-					T.name = Arithmetic_Operator;
-					T.aot = Modulo;
-					accept();
-					break;
-				case('&'):
-					T.name = Bitwise_Operator;
-					T.bot = Bitwise_And;
-					accept();
-					break;
-				case('|'):
-					T.name = Bitwise_Operator;
-					T.bot = Bitwise_Or;
-					accept();
-					break;
-				case('^'):
-					T.name = Bitwise_Operator;
-					T.bot = Bitwise_XOr;
-					accept();
-					break;
-				case('~'):
-					T.name = Bitwise_Operator;
-					T.bot = Bitwise_Complement;
-					accept();
-					break;
-				case('?'):
-					T.name = Conditional_Operator;
-					accept();
-					break;				
-				default:
-					break;
-			}
+			T.identifierIndex = symbols.matchSymbol(lexeme);
+			T.name = Identifier;
 		}
-		print(T);
 	}
+	else {
+		switch(peek()) {
+			case('#'):
+				while((peek() != '\n') && (!eof())) {
+					ignore();
+				}
+				break;
+			case('\''):
+				accept();
+				T.name = Character_Literal;
+				while((peek() != '\'') && (!eof())) {
+					T.charVal = accept();
+				}
+				if(peek() == '\'') {
+					accept();
+				}
+				break;
+			case('\"'):
+				accept();
+				T.name = String_Literal;
+				while((peek() != '\"') && (!eof())) {
+					T.strVal += accept();
+				}
+				if(peek() == '\"') {
+					accept();
+				}
+				break;
+			case('{'):
+				T.name = Left_Brace;
+				accept();
+				break;
+			case('}'):
+				T.name = Right_Brace;
+				accept();
+				break;
+			case('('):
+				T.name = Left_Paren;
+				accept();
+				break;
+			case(')'):
+				T.name = Right_Paren;
+				accept();
+				break;
+			case('['):
+				T.name = Left_Bracket;
+				accept();
+				break;
+			case(']'):
+				T.name = Right_Bracket;
+				accept();
+				break;
+			case(','):
+				T.name = Comma;
+				accept();
+				break;
+			case(';'):
+				T.name = Semicolon;
+				accept();
+				break;					
+			case(':'):
+				T.name = Colon;
+				accept();
+				break;
+			case('='):
+				accept();
+				if(peek() == '=')
+				{
+					accept();
+					T.name = Relational_Operator;
+					T.rot = Equal;
+				}
+				else
+				{
+					T.name = Assignment_Operator;
+				}
+				break;
+			case('!'):
+				T.name = Relational_Operator;
+				accept();
+				if(peek() == '=') {
+					accept();
+					T.rot = Not_Equal;
+				}
+				else {
+					//Throw error
+				}
+				break;
+			case('<'):
+				T.name = Relational_Operator;
+				accept();
+				T.rot = Less_Than;
+				if(peek() == '=') {
+					accept();
+					T.rot = Less_Than_Or_Equal;
+				}
+				break;
+			case('>'):
+				T.name = Relational_Operator;
+				accept();
+				T.rot = Greater_Than;
+				if(peek() == '=') {
+					T.rot = Greater_Than_Or_Equal;
+					accept();
+				}
+				break;
+			case('+'):
+				T.name = Arithmetic_Operator;
+				T.aot = Add;
+				accept();
+				break;
+			case('-'):
+				T.name = Arithmetic_Operator;
+				T.aot = Subtract;
+				accept();
+				break;
+			case('*'):
+				T.name = Arithmetic_Operator;
+				T.aot = Multiply;
+				accept();
+				break;
+			case('/'):
+				T.name = Arithmetic_Operator;
+				T.aot = Divide;
+				accept();
+				break;
+			case('%'):
+				T.name = Arithmetic_Operator;
+				T.aot = Modulo;
+				accept();
+				break;
+			case('&'):
+				T.name = Bitwise_Operator;
+				T.bot = Bitwise_And;
+				accept();
+				break;
+			case('|'):
+				T.name = Bitwise_Operator;
+				T.bot = Bitwise_Or;
+				accept();
+				break;
+			case('^'):
+				T.name = Bitwise_Operator;
+				T.bot = Bitwise_XOr;
+				accept();
+				break;
+			case('~'):
+				T.name = Bitwise_Operator;
+				T.bot = Bitwise_Complement;
+				accept();
+				break;
+			case('?'):
+				T.name = Conditional_Operator;
+				accept();
+				break;				
+			default:
+				break;
+		}
+	}
+	return T;
 }
  
 bool Lexer::eof() {

@@ -1,9 +1,9 @@
-#include <iostream>
-
 #include "lexer.hpp"
 
 int main() {
 	Lexer L("Input.txt");
-	L.lex();
+	while(!L.eof()) {
+		L.print(L.lex());
+	}
 	return 0;
 }

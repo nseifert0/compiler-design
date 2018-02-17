@@ -29,7 +29,7 @@ class Lexer {
 			keywords.insert(std::make_pair("var", Keyword_Var));
 		}
 	
-	void lex();
+	Token lex();
 	bool eof();
 	char peek();
 	char accept();
