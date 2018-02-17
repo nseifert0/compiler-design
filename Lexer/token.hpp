@@ -1,3 +1,6 @@
+//Nicholas Seifert
+//Compiler Design - Spring 2018
+
 #ifndef TOKEN_HPP
 #define TOKEN_HPP
 

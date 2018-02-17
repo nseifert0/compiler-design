@@ -1,3 +1,6 @@
+//Nicholas Seifert
+//Compiler Design - Spring 2018
+
 #ifndef SYMBOLS_HPP
 #define SYMBOLS_HPP
 
