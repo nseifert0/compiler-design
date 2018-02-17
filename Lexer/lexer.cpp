@@ -1,5 +1,6 @@
 #include "lexer.hpp"
 #include <iostream>
+#include <sstream>
 #include <bitset>
 
 Token Lexer::lex() {
@@ -101,6 +102,12 @@ Token Lexer::lex() {
 				break;
 			case('\''):
 				accept();
+				if((peek() == '\''))
+				{
+					std::stringstream ss;
+					ss << "empty character";
+					throw std::runtime_error(ss.str());
+				}				
 				t.name = Character_Literal;
 				if(peek() == '\\') {
 					accept();
@@ -136,14 +143,12 @@ Token Lexer::lex() {
 							t.charVal = '\v';
 							break;
 						default:
-							//throw error
+							std::stringstream ss;
+							ss << "invalid escape character";
+							throw std::runtime_error(ss.str());
 							break;
 					}
 					accept();
-				}
-				if((peek() == '\''))
-				{
-					//throw empty character error;
 				}
 				while((peek() != '\'') && (!eof())) {
 					t.charVal = accept();
@@ -152,7 +157,9 @@ Token Lexer::lex() {
 					accept();
 				}
 				else{
-					//throw error
+					std::stringstream ss;
+					ss << "unended character";
+					throw std::runtime_error(ss.str());
 				}
 				break;
 			case('\"'):
@@ -223,7 +230,9 @@ Token Lexer::lex() {
 					t.rot = Not_Equal;
 				}
 				else {
-					//Throw error
+					std::stringstream ss;
+					ss << "! does not match a valid token";
+					throw std::runtime_error(ss.str());
 				}
 				break;
 			case('<'):
@@ -294,6 +303,9 @@ Token Lexer::lex() {
 				accept();
 				break;				
 			default:
+				std::stringstream ss;
+				ss << "invalid character, no token was lexed";
+				throw std::runtime_error(ss.str());
 				break;
 		}
 	}
