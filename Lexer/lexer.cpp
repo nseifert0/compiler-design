@@ -61,7 +61,6 @@ void Lexer::lex() {
 					}
 					break;
 			}
-			print(T);
 		}
 		else if(isalpha(peek())) {
 			while(isalnum(peek()) || peek() == '_') {
@@ -82,12 +81,10 @@ void Lexer::lex() {
 						T.lot = Not;
 						break;
 				}
-				print(T);
 			}
 			else {
 				T.identifierIndex = symbols.matchSymbol(lexeme);
 				T.name = Identifier;
-				print(T);
 			}
 		}
 		else {
@@ -106,7 +103,6 @@ void Lexer::lex() {
 					if(peek() == '\'') {
 						accept();
 					}
-					print(T);
 					break;
 				case('\"'):
 					accept();
@@ -117,52 +113,42 @@ void Lexer::lex() {
 					if(peek() == '\"') {
 						accept();
 					}
-					print(T);
 					break;
 				case('{'):
 					T.name = Left_Brace;
 					accept();
-					print(T);
 					break;
 				case('}'):
 					T.name = Right_Brace;
 					accept();
-					print(T);
 					break;
 				case('('):
 					T.name = Left_Paren;
 					accept();
-					print(T);
 					break;
 				case(')'):
 					T.name = Right_Paren;
 					accept();
-					print(T);
 					break;
 				case('['):
 					T.name = Left_Bracket;
 					accept();
-					print(T);
 					break;
 				case(']'):
 					T.name = Right_Bracket;
 					accept();
-					print(T);
 					break;
 				case(','):
 					T.name = Comma;
 					accept();
-					print(T);
 					break;
 				case(';'):
 					T.name = Semicolon;
 					accept();
-					print(T);
 					break;					
 				case(':'):
 					T.name = Colon;
 					accept();
-					print(T);
 					break;
 				case('='):
 					accept();
@@ -176,7 +162,6 @@ void Lexer::lex() {
 					{
 						T.name = Assignment_Operator;
 					}
-					print(T);
 					break;
 				case('!'):
 					T.name = Relational_Operator;
@@ -188,7 +173,6 @@ void Lexer::lex() {
 					else {
 						//Throw error
 					}
-					print(T);
 					break;
 				case('<'):
 					T.name = Relational_Operator;
@@ -198,7 +182,6 @@ void Lexer::lex() {
 						accept();
 						T.rot = Less_Than_Or_Equal;
 					}
-					print(T);
 					break;
 				case('>'):
 					T.name = Relational_Operator;
@@ -208,71 +191,61 @@ void Lexer::lex() {
 						T.rot = Greater_Than_Or_Equal;
 						accept();
 					}
-					print(T);
 					break;
 				case('+'):
 					T.name = Arithmetic_Operator;
 					T.aot = Add;
 					accept();
-					print(T);
 					break;
 				case('-'):
 					T.name = Arithmetic_Operator;
 					T.aot = Subtract;
 					accept();
-					print(T);
 					break;
 				case('*'):
 					T.name = Arithmetic_Operator;
 					T.aot = Multiply;
 					accept();
-					print(T);
 					break;
 				case('/'):
 					T.name = Arithmetic_Operator;
 					T.aot = Divide;
 					accept();
-					print(T);
 					break;
 				case('%'):
 					T.name = Arithmetic_Operator;
 					T.aot = Modulo;
 					accept();
-					print(T);
 					break;
 				case('&'):
 					T.name = Bitwise_Operator;
 					T.bot = Bitwise_And;
 					accept();
-					print(T);
 					break;
 				case('|'):
 					T.name = Bitwise_Operator;
 					T.bot = Bitwise_Or;
 					accept();
-					print(T);
 					break;
 				case('^'):
 					T.name = Bitwise_Operator;
 					T.bot = Bitwise_XOr;
 					accept();
-					print(T);
 					break;
 				case('~'):
 					T.name = Bitwise_Operator;
 					T.bot = Bitwise_Complement;
 					accept();
-					print(T);
 					break;
 				case('?'):
 					T.name = Conditional_Operator;
 					accept();
-					print(T);
 					break;				
 				default:
 					break;
 			}
 		}
+		print(T);
 	}
 }
  
