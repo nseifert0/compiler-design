@@ -534,7 +534,7 @@ void Lexer::print(Token t) {
 					std::cout << "\\v";
 					break;
 				default:
-					std::cout << t.charVal << "'>\n";
+					std::cout << t.charVal;
 					break;
 			}
 			std::cout << "'>\n";
