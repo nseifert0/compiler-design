@@ -9,10 +9,15 @@
 Token Lexer::lex() {
 	Token t;
 	lexeme.clear();
+	
 	while(isspace(peek())) {
 		ignore();
 	}
+	
+	//Set the location at the start of the token
 	t.location = file.tellg();
+	
+	//Lex decimal/floating point literals
 	if(isdigit(peek())) {
 		if(peek() == '0') {
 			accept();
@@ -64,6 +69,8 @@ Token Lexer::lex() {
 				break;
 		}
 	}
+	
+	//Lex words, identifiers, and other characters
 	else if(isalpha(peek())) {
 		while(isalnum(peek()) || peek() == '_') {
 			lexeme += accept();
@@ -99,11 +106,15 @@ Token Lexer::lex() {
 	}
 	else {
 		switch(peek()) {
+			
+			//Lex comments
 			case('#'):
 				while((peek() != '\n') && (!eof())) {
 					ignore();
 				}
 				break;
+			
+			//Lex character literal
 			case('\''):
 				accept();
 				if((peek() == '\''))
@@ -166,6 +177,8 @@ Token Lexer::lex() {
 					throw std::runtime_error(ss.str());
 				}
 				break;
+			
+			//Lex string literal
 			case('\"'):
 				accept();
 				t.name = String_Literal;
@@ -177,6 +190,8 @@ Token Lexer::lex() {
 					accept();
 				}
 				break;
+				
+			//Lex other kinds of tokens
 			case('{'):
 				t.name = Left_Brace;
 				accept();

@@ -9,6 +9,8 @@ int Symbols::addSymbol(std::string s) {
 	return numberOfSymbols;
 }
 
+
+//Gets the index of the symbobl in the table
 int Symbols::matchSymbol(std::string s) {
 	std::map<std::string, int>::iterator it;
 	it = symbolTable.begin();
@@ -21,6 +23,7 @@ int Symbols::matchSymbol(std::string s) {
 	return addSymbol(s);
 }
 
+//Gets the symbobl from the table based upon the index
 std::string Symbols::matchSymbol(int tableIndex) {
 	std::map<std::string, int>::iterator it;
 	it = symbolTable.begin();
