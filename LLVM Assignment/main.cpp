@@ -6,6 +6,6 @@ extern "C" const char* string_chr(const char* str, char c);
 extern "C" char* string_cpy(char* dest, const char* src);
 
 int main() {
-  const char s[] = "Hi";
+  const char s[] = "Paging Dr. Bunksley";
   std::cout << string_len(s) << "\n";
 }
