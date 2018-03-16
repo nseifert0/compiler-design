@@ -1,5 +1,4 @@
-define i32 @string_len(i8* %str) {
-	
+define i32 @string_len(i8* %str) {	
 	LoopHeader:
 		br label %Loop
 	
@@ -18,8 +17,7 @@ define i32 @string_len(i8* %str) {
 		ret i32 %result
 }
 
-define i32 @string_cmp(i8* %str1, i8* %str2) {
-	
+define i32 @string_cmp(i8* %str1, i8* %str2) {	
 	LoopHeader:
 		br label %Loop
 	
@@ -71,7 +69,31 @@ define i8* @string_chr(i8* %str, i8 %c) {
 		ret i8* %newptr
 }
 
-define i8* @string_cpy(i8* %str) {
-	%size = inttoptr i8 1 to i8*
-	ret i8* %size
+define i8* @string_cpy(i8* %dest, i8* %src) {
+	LoopHeader:
+		br label %Loop
+	
+	Loop:
+		%index = phi i64 [0, %LoopHeader], [%nextindex, %Loop]
+		%nextindex = add i64 %index, 1
+		
+		%temp1 = ptrtoint i8* %src to i64
+		%temp2 = add i64 %temp1, %index
+		%newptr1 = inttoptr i64 %temp2 to i8*
+		%charval = load i8, i8* %newptr1
+		
+		%temp3 = ptrtoint i8* %dest to i64
+		%temp4 = add i64 %temp3, %index
+		%newptr2 = inttoptr i64 %temp4 to i8*
+		store i8 %charval, i8* %newptr2
+		
+		%cond = icmp eq i8 %charval, 0
+		br i1 %cond, label %End, label %Loop
+	
+	End:
+		ret i8* %dest
+}
+
+define i8* @string_cat(i8* %dest, i8* %src) {
+	ret i8* %dest
 }
