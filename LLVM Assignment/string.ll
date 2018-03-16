@@ -129,7 +129,7 @@ define i8* @string_cat(i8* %dest, i8* %src) {
 		%charval = load i8, i8* %newptr1
 		
 		%temp3_2 = ptrtoint i8* %newdestptr to i64
-		%temp4_2 = add i64 %temp3_2, %index
+		%temp4_2 = add i64 %temp3_2, %index2
 		%newptr2 = inttoptr i64 %temp4_2 to i8*
 		store i8 %charval, i8* %newptr2
 		
