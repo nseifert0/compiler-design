@@ -11,4 +11,6 @@ int main() {
   const char s2[] = "Chunga";
   std::cout << std::strcmp(s1, s2) << "\n";
   std::cout << string_cmp(s1, s2) << "\n";
+  std::cout << std::strchr(s1, 'g') << "\n";
+  std::cout << string_chr(s1, 'g') << "\n";
 }
