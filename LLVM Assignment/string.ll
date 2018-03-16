@@ -1,3 +1,6 @@
+
+;---------------------------------------------------------------------------------------------
+
 define i32 @string_len(i8* %str) {	
 	LoopHeader:
 		br label %Loop
@@ -16,6 +19,8 @@ define i32 @string_len(i8* %str) {
 		%result = trunc i64 %size to i32
 		ret i32 %result
 }
+
+;---------------------------------------------------------------------------------------------
 
 define i32 @string_cmp(i8* %str1, i8* %str2) {	
 	LoopHeader:
@@ -51,6 +56,8 @@ define i32 @string_cmp(i8* %str1, i8* %str2) {
 		ret i32 %result
 }
 
+;---------------------------------------------------------------------------------------------
+
 define i8* @string_chr(i8* %str, i8 %c) {
 	LoopHeader:
 		br label %Loop
@@ -68,6 +75,8 @@ define i8* @string_chr(i8* %str, i8 %c) {
 	End:
 		ret i8* %newptr
 }
+
+;---------------------------------------------------------------------------------------------
 
 define i8* @string_cpy(i8* %dest, i8* %src) {
 	LoopHeader:
@@ -94,6 +103,39 @@ define i8* @string_cpy(i8* %dest, i8* %src) {
 		ret i8* %dest
 }
 
+;---------------------------------------------------------------------------------------------
+
 define i8* @string_cat(i8* %dest, i8* %src) {
-	ret i8* %dest
+	LoopHeader:
+		br label %Loop
+	
+	Loop:
+		%index = phi i64 [0, %LoopHeader], [%nextindex, %Loop]
+		%nextindex = add i64 %index, 1
+		%temp1 = ptrtoint i8* %dest to i64
+		%temp2 = add i64 %temp1, %index
+		%newdestptr = inttoptr i64 %temp2 to i8*
+		%destcharval = load i8, i8* %newdestptr
+		%cond1 = icmp eq i8 %destcharval, 0
+		br i1 %cond1, label %Loop2, label %Loop
+	
+	Loop2:
+		%index2 = phi i64 [0, %Loop], [%nextindex2, %Loop2]
+		%nextindex2 = add i64 %index2, 1
+		
+		%temp1_2 = ptrtoint i8* %src to i64
+		%temp2_2 = add i64 %temp1_2, %index2
+		%newptr1 = inttoptr i64 %temp2_2 to i8*
+		%charval = load i8, i8* %newptr1
+		
+		%temp3_2 = ptrtoint i8* %newdestptr to i64
+		%temp4_2 = add i64 %temp3_2, %index
+		%newptr2 = inttoptr i64 %temp4_2 to i8*
+		store i8 %charval, i8* %newptr2
+		
+		%cond2 = icmp eq i8 %charval, 0
+		br i1 %cond2, label %End, label %Loop2
+	
+	End:
+		ret i8* %dest
 }

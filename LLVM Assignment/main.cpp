@@ -12,6 +12,8 @@ int main() {
   const char s2[] = "Chunga";
   char s3[50];
   char s4[50];
+  char s5[50] = "You are a ";
+  char s6[50] = "You are a ";
   
   std::cout << std::strcmp(s1, s2) << "\n";
   std::cout << string_cmp(s1, s2) << "\n";
@@ -21,4 +23,7 @@ int main() {
   
   std::cout << std::strcpy(s3, s1) << "\n";
   std::cout << string_cpy(s4, s1) << "\n";
+  
+  std::cout << std::strcat(s5, s1) << "\n";
+  std::cout << string_cat(s6, s1) << "\n";
 }
