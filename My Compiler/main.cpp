@@ -5,6 +5,7 @@
 
 
 int main() {
-	Parser P("Input.txt");
+	Parser parser("Input.txt");
+	parser.parse();
 	return 0;
 }
