@@ -1,3 +1,6 @@
+//Nicholas Seifert
+//Compiler Design - Spring 2018
+
 #include "parser.hpp"
 
 void Parser::parse() {
