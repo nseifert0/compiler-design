@@ -7,10 +7,11 @@
 
 class Parser {
 	public:
-		Parser() {
-		
+		Parser(const char* filepath):lexer(filepath) {
+			lexer.print(lexer.lex());
 		}
 	private:
+		Lexer lexer;
 };
 
 #endif

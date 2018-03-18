@@ -5,10 +5,6 @@
 
 
 int main() {
-	Parser P;
-	Lexer L("Input.txt");
-	while(!L.eof()) {
-		L.print(L.lex());
-	}
+	Parser P("Input.txt");
 	return 0;
 }
