@@ -177,6 +177,11 @@ void Parser::parseAdditiveExpression() {
 }
 
 void Parser::parseShiftExpression() {
+	parseAdditiveExpression();
+	while(lookAhead(0).name == Shift_Operator) {
+		accept();
+		parseAdditiveExpression();
+	}
 }
 
 void Parser::parseRelationalExpression() {
