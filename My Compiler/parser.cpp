@@ -266,6 +266,13 @@ void Parser::parseLogicalOrExpression() {
 }
 
 void Parser::parseConditionalExpression() {
+	parseLogicalOrExpression();
+	if(lookAhead(0).name == Conditional_Operator) {
+		accept();
+		parseExpression();
+		acceptSpecific(Colon);
+		parseConditionalExpression();
+	}
 }
 
 void Parser::parseAssignmentExpression() {
