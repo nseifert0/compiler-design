@@ -79,6 +79,7 @@ class Parser {
 		Token accept();
 		Token acceptSpecific(TokenName tokenName);
 		bool checkIfPostfixType();
+		bool checkIfUnaryExpression();
 };
 
 #endif

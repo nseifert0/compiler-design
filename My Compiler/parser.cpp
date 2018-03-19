@@ -132,15 +132,27 @@ void Parser::parsePostfixExpression() {
 }
 
 void Parser::parseArgumentList() {
+	parseArgument();
+	while(lookAhead(0).name == Comma) {
+		accept();
+		parseArgument();
+	}
+	
 }
 
 void Parser::parseArgument() {
+	parseExpression();
 }
 
 void Parser::parseUnaryExpression() {
+	while(checkIfUnaryExpression()) {
+		accept();
+	}
+	parsePostfixExpression();
 }
 
 void Parser::parseCastExpression() {
+	
 }
 
 void Parser::parseMultiplicativeExpression() {
@@ -295,6 +307,38 @@ bool Parser::checkIfPostfixType() {
 		case Left_Bracket:
 			return true;
 		
+		default:
+			return false;
+	}	
+}
+
+// Specfics of the language are again kind of unclear here, especially since "!" isn't in the language
+bool Parser::checkIfUnaryExpression() {
+	switch(lookAhead(0).name) {
+		case Arithmetic_Operator:
+			switch(lookAhead(0).aot) {
+				case Add:
+				case Subtract:
+				case Multiply:
+					return true;
+				default:
+					return false;
+			}
+		case Bitwise_Operator:
+			switch(lookAhead(0).bot) {
+				case Bitwise_And:
+				case Bitwise_Complement:
+					return true;
+				default:
+					return false;
+			}
+		case Logical_Operator:
+			switch(lookAhead(0).lot) {
+				case Not:
+					return true;
+				default:
+					return false;
+			}
 		default:
 			return false;
 	}	
