@@ -276,6 +276,11 @@ void Parser::parseConditionalExpression() {
 }
 
 void Parser::parseAssignmentExpression() {
+	parseConditionalExpression();
+	while(lookAhead(0).name == Assignment_Operator) {
+		accept();
+		parseConditionalExpression();
+	}
 }
 
 void Parser::parseExpression() {
