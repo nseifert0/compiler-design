@@ -185,6 +185,11 @@ void Parser::parseShiftExpression() {
 }
 
 void Parser::parseRelationalExpression() {
+	parseShiftExpression();
+	while(lookAhead(0).name == Relational_Operator) {
+		accept();
+		parseShiftExpression();
+	}
 }
 
 void Parser::parseEqualityExpression() {
