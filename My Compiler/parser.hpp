@@ -81,6 +81,7 @@ class Parser {
 		bool checkIfPostfixType();
 		bool checkIfUnaryExpression();
 		bool checkIfMultiplicativeExpression();
+		bool checkIfAdditiveExpression();
 };
 
 #endif

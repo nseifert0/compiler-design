@@ -169,6 +169,11 @@ void Parser::parseMultiplicativeExpression() {
 }
 
 void Parser::parseAdditiveExpression() {
+	parseMultiplicativeExpression();
+	while(checkIfAdditiveExpression()) {
+		accept();
+		parseMultiplicativeExpression();
+	}
 }
 
 void Parser::parseShiftExpression() {
@@ -360,6 +365,20 @@ bool Parser::checkIfMultiplicativeExpression() {
 			case Multiply:
 			case Divide:
 			case Modulo:
+				return true;
+			default:
+				return false;
+		}
+	else {
+		return false;
+	}
+}
+
+bool Parser::checkIfAdditiveExpression() {
+	if(lookAhead(0).name == Arithmetic_Operator)
+		switch(lookAhead(0).aot) {
+			case Add:
+			case Subtract:
 				return true;
 			default:
 				return false;
