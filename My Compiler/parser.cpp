@@ -186,13 +186,18 @@ void Parser::parseShiftExpression() {
 
 void Parser::parseRelationalExpression() {
 	parseShiftExpression();
-	while(lookAhead(0).name == Relational_Operator) {
+	while(checkIfRelationalExpression()) {
 		accept();
 		parseShiftExpression();
 	}
 }
 
 void Parser::parseEqualityExpression() {
+	parseRelationalExpression();
+	while(checkIfEqualityExpression()) {
+		accept();
+		parseRelationalExpression();
+	}
 }
 
 void Parser::parseBitwiseAndExpression() {
@@ -389,6 +394,36 @@ bool Parser::checkIfAdditiveExpression() {
 		switch(lookAhead(0).aot) {
 			case Add:
 			case Subtract:
+				return true;
+			default:
+				return false;
+		}
+	else {
+		return false;
+	}
+}
+
+bool Parser::checkIfRelationalExpression() {
+	if(lookAhead(0).name == Relational_Operator)
+		switch(lookAhead(0).rot) {
+			case Less_Than:
+			case Less_Than_Or_Equal:
+			case Greater_Than:
+			case Greater_Than_Or_Equal:
+				return true;
+			default:
+				return false;
+		}
+	else {
+		return false;
+	}
+}
+
+bool Parser::checkIfEqualityExpression() {
+	if(lookAhead(0).name == Relational_Operator)
+		switch(lookAhead(0).rot) {
+			case Equal:
+			case Not_Equal:
 				return true;
 			default:
 				return false;

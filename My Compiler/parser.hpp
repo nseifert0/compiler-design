@@ -82,6 +82,8 @@ class Parser {
 		bool checkIfUnaryExpression();
 		bool checkIfMultiplicativeExpression();
 		bool checkIfAdditiveExpression();
+		bool checkIfRelationalExpression();
+		bool checkIfEqualityExpression();
 };
 
 #endif
