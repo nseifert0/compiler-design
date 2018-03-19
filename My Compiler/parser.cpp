@@ -284,9 +284,11 @@ void Parser::parseAssignmentExpression() {
 }
 
 void Parser::parseExpression() {
+	parseAssignmentExpression();
 }
 
 void Parser::parseConstantExpression() {
+	parseConditionalExpression();
 }
 
 
