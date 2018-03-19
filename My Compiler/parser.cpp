@@ -21,7 +21,7 @@ void Parser::parseBasicType() {
 			return;
 		
 		
-		//Not sure what to do here based upon the language description
+		//Not sure what to do here based upon the language description, is there an -> operator?
 		case Left_Paren:
 			accept();
 			if(lookAhead(0).name != Right_Paren) {
@@ -83,6 +83,29 @@ void Parser::parseType() {
 //------------------------------------------------------------------------------
 //Parsing Expressions
 void Parser::parsePrimaryExpression() {
+	switch(lookAhead(0).name) {
+		case Decimal_Integer_Literal:
+		case Hexadecimal_Integer_Literal:
+		case Binary_Integer_Literal:
+		case Floating_Point_Literal:
+		case Boolean_Literal:
+		case Character_Literal:
+		case String_Literal:
+		case Identifier:
+			accept();
+			return;
+		
+		case Left_Paren:
+			accept();
+			parseExpression();
+			acceptSpecific(Right_Paren);
+		
+		default:
+			std::stringstream ss;
+			ss << "Syntax Error";
+			throw std::runtime_error(ss.str());
+	}
+	
 }
 
 void Parser::parsePostfixExpression() {
