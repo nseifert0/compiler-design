@@ -152,7 +152,11 @@ void Parser::parseUnaryExpression() {
 }
 
 void Parser::parseCastExpression() {
-	
+	parseUnaryExpression();
+	while(lookAhead(0).name == Keyword_As) {
+		accept();
+		parseType();
+	}
 }
 
 void Parser::parseMultiplicativeExpression() {
