@@ -22,6 +22,7 @@ enum TokenName {
 	Logical_Operator,
 	Conditional_Operator,
 	Assignment_Operator,
+	Shift_Operator,
 	Keyword_And,
 	Keyword_As,
 	Keyword_Bool,
@@ -82,6 +83,11 @@ enum LogicalOperatorType {
 	Not
 };
 
+enum ShiftOperatorType {
+	Left,
+	Right
+};
+
 enum BooleanLiteralType {
 	True,
 	False
@@ -102,6 +108,7 @@ class Token {
 			BitwiseOperatorType bot;
 			LogicalOperatorType lot;
 			BooleanLiteralType blt;
+			ShiftOperatorType sot;
 		};
 		
 	private:

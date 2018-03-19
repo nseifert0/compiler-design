@@ -255,21 +255,35 @@ Token Lexer::lex() {
 				}
 				break;
 			case('<'):
-				t.name = Relational_Operator;
 				accept();
-				t.rot = Less_Than;
-				if(peek() == '=') {
+				if(peek() == '<') {
+					t.name = Shift_Operator;
 					accept();
-					t.rot = Less_Than_Or_Equal;
+					t.sot = Left;
+				}
+				else {
+					t.name = Relational_Operator;
+					t.rot = Less_Than;
+					if(peek() == '=') {
+						accept();
+						t.rot = Less_Than_Or_Equal;
+					}
 				}
 				break;
 			case('>'):
-				t.name = Relational_Operator;
 				accept();
-				t.rot = Greater_Than;
-				if(peek() == '=') {
-					t.rot = Greater_Than_Or_Equal;
+				if(peek() == '>') {
+					t.name = Shift_Operator;
 					accept();
+					t.sot = Right;
+				}
+				else {
+					t.name = Relational_Operator;
+					t.rot = Greater_Than;
+					if(peek() == '=') {
+						t.rot = Greater_Than_Or_Equal;
+						accept();
+					}
 				}
 				break;
 			case('+'):
