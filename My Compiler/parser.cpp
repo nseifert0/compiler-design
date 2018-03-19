@@ -240,9 +240,29 @@ void Parser::parseBitwiseOrExpression() {
 }
 
 void Parser::parseLogicalAndExpression() {
+	parseBitwiseOrExpression();
+	while(lookAhead(0).name == Logical_Operator) {
+		if(lookAhead(0).lot == And) {
+			accept();
+			parseBitwiseOrExpression();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseLogicalOrExpression() {
+	parseLogicalAndExpression();
+	while(lookAhead(0).name == Logical_Operator) {
+		if(lookAhead(0).lot == Or) {
+			accept();
+			parseLogicalAndExpression();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseConditionalExpression() {
