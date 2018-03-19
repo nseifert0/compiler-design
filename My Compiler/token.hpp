@@ -23,6 +23,7 @@ enum TokenName {
 	Conditional_Operator,
 	Assignment_Operator,
 	Keyword_And,
+	Keyword_As,
 	Keyword_Bool,
 	Keyword_Char,
 	Keyword_Const,

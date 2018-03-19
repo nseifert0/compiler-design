@@ -17,6 +17,7 @@ class Lexer {
 			: file(filepath)
 		{
 			keywords.insert(std::make_pair("and", Keyword_And));
+			keywords.insert(std::make_pair("as", Keyword_As));
 			keywords.insert(std::make_pair("bool", Keyword_Bool));
 			keywords.insert(std::make_pair("char", Keyword_Char));
 			keywords.insert(std::make_pair("const", Keyword_Const));
