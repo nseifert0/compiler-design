@@ -77,6 +77,8 @@ class Parser {
 		void pushToken();
 		Token lookAhead(int howMuch);
 		Token accept();
+		Token acceptSpecific(TokenName tokenName);
+		bool checkIfPostfix();
 };
 
 #endif

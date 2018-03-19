@@ -3,24 +3,81 @@
 
 #include "parser.hpp"
 
+#include <sstream>
+
 void Parser::parse() {
 }
 
 //------------------------------------------------------------------------------
 //Parsing Types
 void Parser::parseBasicType() {
+	switch(lookAhead(0).name) {
+		case Keyword_Void:
+		case Keyword_Bool:
+		case Keyword_Int:
+		case Keyword_Float:
+		case Keyword_Char:
+			accept();
+			return;
+		
+		
+		//Not sure what to do here based upon the language description
+		case Left_Paren:
+			accept();
+			if(lookAhead(0).name != Right_Paren) {
+				parseTypeList();
+			}
+			acceptSpecific(Right_Paren);
+			return;
+		
+		default:
+			std::stringstream ss;
+			ss << "Syntax Error";
+			throw std::runtime_error(ss.str());
+	}
 }
 
 void Parser::parseTypeList() {
+	parseType();
+	while(lookAhead(0).name == Comma) {
+		accept();
+		parseType();
+	}
 }
 
 void Parser::parsePostfixType() {
+	parseBasicType();
+	while(checkIfPostfix()) {
+		if(lookAhead(0).name == Left_Bracket) {
+			accept();
+			if(lookAhead(0).name == Right_Bracket) {
+				accept();
+			}
+			else {
+				parseExpression();
+				acceptSpecific(Right_Bracket);
+			}
+		}
+		else {
+			accept();
+		}
+	}
 }
 
 void Parser::parseReferenceType() {
+	parsePostfixType();
+	while(lookAhead(0).name == Bitwise_Operator) {
+		if(lookAhead(0).bot == Bitwise_And) {
+			accept();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseType() {
+	parsePostfixType();
 }
 
 //------------------------------------------------------------------------------
@@ -170,4 +227,32 @@ Token Parser::accept() {
 	Token acceptedToken = lookAhead(0);
 	tokenQueue.pop_front();
 	return acceptedToken;
+}
+
+Token Parser::acceptSpecific(TokenName tokenName) {
+	if(lookAhead(0).name == tokenName) {
+		return accept();
+	}
+	else {
+		std::stringstream ss;
+		ss << "Syntax Error";
+		throw std::runtime_error(ss.str());
+	}
+}
+
+bool Parser::checkIfPostfix() {
+	switch(lookAhead(0).name) {
+		case Arithmetic_Operator:
+			if(lookAhead(0).aot != Multiply) {
+				return false;
+			}
+		case Keyword_Const:
+		case Keyword_Volatile:
+		case Keyword_Float:
+		case Left_Bracket:
+			return true;
+		
+		default:
+			return false;
+	}	
 }

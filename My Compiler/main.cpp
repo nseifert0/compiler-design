@@ -3,9 +3,8 @@
 
 #include "parser.hpp"
 
-
 int main() {
 	Parser parser("Input.txt");
-	parser.parse();
+	parser.parseType();
 	return 0;
 }
