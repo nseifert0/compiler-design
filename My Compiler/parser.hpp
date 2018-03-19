@@ -78,7 +78,7 @@ class Parser {
 		Token lookAhead(int howMuch);
 		Token accept();
 		Token acceptSpecific(TokenName tokenName);
-		bool checkIfPostfix();
+		bool checkIfPostfixType();
 };
 
 #endif

@@ -47,7 +47,7 @@ void Parser::parseTypeList() {
 
 void Parser::parsePostfixType() {
 	parseBasicType();
-	while(checkIfPostfix()) {
+	while(checkIfPostfixType()) {
 		if(lookAhead(0).name == Left_Bracket) {
 			accept();
 			if(lookAhead(0).name == Right_Bracket) {
@@ -109,6 +109,26 @@ void Parser::parsePrimaryExpression() {
 }
 
 void Parser::parsePostfixExpression() {
+	parsePrimaryExpression();
+	switch(lookAhead(0).name) {
+		case Left_Paren:
+			accept();
+			if(lookAhead(0).name != Right_Paren) {
+				parseArgumentList();
+			}
+			acceptSpecific(Right_Paren);
+			break;
+		case Left_Bracket:
+			accept();
+			if(lookAhead(0).name != Right_Bracket) {
+				parseArgumentList();
+			}
+			acceptSpecific(Right_Bracket);
+			break;
+		default:
+			break;
+	}
+	
 }
 
 void Parser::parseArgumentList() {
@@ -263,7 +283,7 @@ Token Parser::acceptSpecific(TokenName tokenName) {
 	}
 }
 
-bool Parser::checkIfPostfix() {
+bool Parser::checkIfPostfixType() {
 	switch(lookAhead(0).name) {
 		case Arithmetic_Operator:
 			if(lookAhead(0).aot != Multiply) {
