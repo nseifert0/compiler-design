@@ -201,12 +201,42 @@ void Parser::parseEqualityExpression() {
 }
 
 void Parser::parseBitwiseAndExpression() {
+	parseEqualityExpression();
+	while(lookAhead(0).name == Bitwise_Operator) {
+		if(lookAhead(0).bot == Bitwise_And) {
+			accept();
+			parseEqualityExpression();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseBitwiseXorExpression() {
+	parseBitwiseAndExpression();
+	while(lookAhead(0).name == Bitwise_Operator) {
+		if(lookAhead(0).bot == Bitwise_XOr) {
+			accept();
+			parseBitwiseAndExpression();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseBitwiseOrExpression() {
+	parseBitwiseXorExpression();
+	while(lookAhead(0).name == Bitwise_Operator) {
+		if(lookAhead(0).bot == Bitwise_Or) {
+			accept();
+			parseBitwiseXorExpression();
+		}
+		else {
+			break;
+		}
+	}
 }
 
 void Parser::parseLogicalAndExpression() {
