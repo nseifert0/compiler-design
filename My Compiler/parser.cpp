@@ -310,9 +310,13 @@ void Parser::parseWhileStatement() {
 }
 
 void Parser::parseBreakStatement() {
+	acceptSpecific(Keyword_Break);
+	acceptSpecific(Semicolon);
 }
 
 void Parser::parseContinueStatement() {
+	acceptSpecific(Keyword_Continue);
+	acceptSpecific(Semicolon);
 }
 
 void Parser::parseReturnStatement() {
