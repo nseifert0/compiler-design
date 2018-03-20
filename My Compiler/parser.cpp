@@ -395,6 +395,10 @@ void Parser::parseProgram() {
 }
 
 void Parser::parseDeclarationSeq() {
+	parseDeclaration();
+	while(!lexer.eof()) {
+		parseDeclaration();
+	}
 }
 
 void Parser::parseDeclaration() {
