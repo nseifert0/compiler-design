@@ -319,9 +319,12 @@ void Parser::parseReturnStatement() {
 }
 
 void Parser::parseDeclarationStatement() {
+	parseLocalDeclaration();
 }
 
 void Parser::parseExpressionStatement() {
+	parseExpression();
+	acceptSpecific(Semicolon);
 }
 
 //------------------------------------------------------------------------------
