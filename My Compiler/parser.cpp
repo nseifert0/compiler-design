@@ -306,6 +306,12 @@ void Parser::parseBlockStatement() {
 }
 
 void Parser::parseStatementSeq() {
+	//Statement Sequences Only Appear in Block Statements
+	//Block Statements are Surrounded by Brackets.
+	parseStatement();
+	while(lookAhead(0).name != Right_Bracket) {
+		parseStatement();
+	}
 }
 
 void Parser::parseIfStatement() {
