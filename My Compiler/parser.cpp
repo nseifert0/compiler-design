@@ -424,13 +424,27 @@ void Parser::parseObjectDefinition() {
 		case Keyword_Let:
 			parseConstantDefinition();
 			break;
-		case Keyword_def:
+		case Keyword_Def:
 			parseValueDefinition();
 			break;
 	}
 }
 
 void Parser::parseVariableDefinition() {
+	acceptSpecific(Keyword_Var);
+	acceptSpecific(Identifier);
+	acceptSpecific(Colon);
+	parseType();
+	switch(lookAhead(0).name) {
+		case Semicolon:
+			accept();
+			break;
+		case Assignment_Operator:
+			accept();
+			parseExpression();
+			acceptSpecific(Semicolon);
+			break;
+	}
 }
 
 void Parser::parseConstantDefinition() {
