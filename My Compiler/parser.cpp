@@ -307,8 +307,10 @@ void Parser::parseStatement() {
 			break;
 		case Keyword_Continue:
 			parseContinueStatement();
+			break;
 		case Keyword_Return:
 			parseReturnStatement();
+			break;
 		case Keyword_Var:
 		case Keyword_Let:
 		case Keyword_Def:
@@ -387,6 +389,9 @@ void Parser::parseExpressionStatement() {
 //------------------------------------------------------------------------------
 //Parsing Declarations
 void Parser::parseProgram() {
+	if(!lexer.eof()) {
+		parseDeclarationSeq();
+	}
 }
 
 void Parser::parseDeclarationSeq() {
