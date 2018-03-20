@@ -19,8 +19,10 @@ class Lexer {
 			keywords.insert(std::make_pair("and", Keyword_And));
 			keywords.insert(std::make_pair("as", Keyword_As));
 			keywords.insert(std::make_pair("bool", Keyword_Bool));
+			keywords.insert(std::make_pair("break", Keyword_Break));
 			keywords.insert(std::make_pair("char", Keyword_Char));
 			keywords.insert(std::make_pair("const", Keyword_Const));
+			keywords.insert(std::make_pair("continue", Keyword_Continue));
 			keywords.insert(std::make_pair("def", Keyword_Def));
 			keywords.insert(std::make_pair("else", Keyword_Else));
 			keywords.insert(std::make_pair("false", Keyword_False));
