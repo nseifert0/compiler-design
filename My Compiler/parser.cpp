@@ -298,12 +298,26 @@ void Parser::parseStatement() {
 }
 
 void Parser::parseBlockStatement() {
+	acceptSpecific(Left_Bracket);
+	if(lookAhead(0).name != Right_Bracket) {
+		parseStatementSeq();
+	}
+	acceptSpecific(Right_Bracket);
 }
 
 void Parser::parseStatementSeq() {
 }
 
 void Parser::parseIfStatement() {
+	acceptSpecific(Keyword_If);
+	acceptSpecific(Left_Paren);
+	parseExpression();
+	acceptSpecific(Right_Paren);
+	parseStatement();
+	if(lookAhead(0).name == Keyword_Else) {
+		accept();
+		parseStatement();
+	}
 }
 
 void Parser::parseWhileStatement() {
