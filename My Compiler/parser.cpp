@@ -316,6 +316,11 @@ void Parser::parseContinueStatement() {
 }
 
 void Parser::parseReturnStatement() {
+	acceptSpecific(Keyword_Return);
+	if(lookAhead(0).name != Semicolon) {
+		parseExpression();
+	}
+	acceptSpecific(Semicolon);
 }
 
 void Parser::parseDeclarationStatement() {
