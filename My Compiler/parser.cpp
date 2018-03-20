@@ -1,5 +1,6 @@
 //Nicholas Seifert
 //Compiler Design - Spring 2018
+//TODO: Implement arrow operator and fix sections with arrow operator
 
 #include "parser.hpp"
 
@@ -468,10 +469,25 @@ void Parser::parseValueDefinition() {
 }
 
 void Parser::parseFunctionDefinition() {
+	acceptSpecific(Keyword_Def);
+	acceptSpecific(Identifier);
+	acceptSpecific(Left_Paren);
+	if(lookAhead(0).name != Right_Paren) {
+		parseParameterList();
+	}
+	acceptSpecific(Right_Paren);
+	//TODO IMPLEMENT ARROW OPERATOR
+	//acceptSpecific(Arrow_Operator);
+	parseType();
+	parseBlockStatement();
 	
 }
 
 void Parser::parseParameterList() {
+	parseParameter();
+	while(lookAhead(0).name != Right_Paren) {
+		parseParameter();
+	}
 }
 
 void Parser::parseParameter() {
