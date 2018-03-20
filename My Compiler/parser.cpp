@@ -402,6 +402,14 @@ void Parser::parseDeclarationSeq() {
 }
 
 void Parser::parseDeclaration() {
+	switch(lookAhead(2).name) {
+		case Left_Paren:
+			parseFunctionDefinition();
+			break;
+		case Colon:
+			parseObjectDefinition();
+			break;
+	}
 }
 
 void Parser::parseLocalDeclaration() {
