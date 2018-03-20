@@ -295,6 +295,29 @@ void Parser::parseConstantExpression() {
 //------------------------------------------------------------------------------
 //Parsing Statements
 void Parser::parseStatement() {
+	switch(lookAhead(0).name) {
+		case Right_Bracket:
+			parseBlockStatement();
+			break;
+		case Keyword_If:
+			parseIfStatement();
+			break;
+		case Keyword_While:
+			parseWhileStatement();
+			break;
+		case Keyword_Continue:
+			parseContinueStatement();
+		case Keyword_Return:
+			parseReturnStatement();
+		case Keyword_Var:
+		case Keyword_Let:
+		case Keyword_Def:
+			parseDeclarationStatement();
+			break;
+		default:
+			parseExpressionStatement();
+			break;
+	}
 }
 
 void Parser::parseBlockStatement() {
