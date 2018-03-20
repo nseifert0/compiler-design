@@ -307,6 +307,11 @@ void Parser::parseIfStatement() {
 }
 
 void Parser::parseWhileStatement() {
+	acceptSpecific(Keyword_While);
+	acceptSpecific(Left_Paren);
+	parseExpression();
+	acceptSpecific(Right_Paren);
+	parseStatement();
 }
 
 void Parser::parseBreakStatement() {
