@@ -1,6 +1,7 @@
 //Nicholas Seifert
 //Compiler Design - Spring 2018
 //TODO: Implement arrow operator and fix sections with arrow operator
+//		Add a print function for the token names, this will allow for errors to show expected token 
 
 #include "parser.hpp"
 
