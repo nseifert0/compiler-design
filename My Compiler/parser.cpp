@@ -448,9 +448,23 @@ void Parser::parseVariableDefinition() {
 }
 
 void Parser::parseConstantDefinition() {
+	acceptSpecific(Keyword_Let);
+	acceptSpecific(Identifier);
+	acceptSpecific(Colon);
+	parseType();
+	acceptSpecific(Assignment_Operator);
+	parseExpression();
+	acceptSpecific(Semicolon);
 }
 
 void Parser::parseValueDefinition() {
+	acceptSpecific(Keyword_Def);
+	acceptSpecific(Identifier);
+	acceptSpecific(Colon);
+	parseType();
+	acceptSpecific(Assignment_Operator);
+	parseExpression();
+	acceptSpecific(Semicolon);
 }
 
 void Parser::parseFunctionDefinition() {
