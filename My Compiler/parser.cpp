@@ -413,9 +413,21 @@ void Parser::parseDeclaration() {
 }
 
 void Parser::parseLocalDeclaration() {
+	parseObjectDefinition();
 }
 
 void Parser::parseObjectDefinition() {
+	switch(lookAhead(0).name) {
+		case Keyword_Var:
+			parseVariableDefinition();
+			break;
+		case Keyword_Let:
+			parseConstantDefinition();
+			break;
+		case Keyword_def:
+			parseValueDefinition();
+			break;
+	}
 }
 
 void Parser::parseVariableDefinition() {
