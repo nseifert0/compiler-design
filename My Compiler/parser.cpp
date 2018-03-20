@@ -468,12 +468,16 @@ void Parser::parseValueDefinition() {
 }
 
 void Parser::parseFunctionDefinition() {
+	
 }
 
 void Parser::parseParameterList() {
 }
 
 void Parser::parseParameter() {
+	acceptSpecific(Identifier);
+	acceptSpecific(Colon);
+	parseType();
 }
 
 //------------------------------------------------------------------------------
