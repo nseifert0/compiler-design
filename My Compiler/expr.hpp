@@ -5,6 +5,7 @@
 #ifndef EXPR_HPP
 #define EXPR_HPP
 
+//Allow type to be used but defined later
 class Type;
 
 enum whatExpr {
@@ -20,7 +21,7 @@ enum whatExpr {
 	relationalExpression,
 	equalityExpression,
 	bitwiseAndExpression,
-	bitwiseXorExpression,
+	bitwiseXOrExpression,
 	bitwiseOrExpression,
 	logicalAndExpression,
 	logicalOrExpression,
@@ -161,6 +162,132 @@ class CastExpr : protected Expr {
 		
 		Expr* argument;
 		Type* castType;
+};
+
+class MultiplicativeExpr : protected Expr {
+	public: 
+		MultiplicativeExpr(whatMultiplicativeExpr mE, Expr* l, Expr* r)
+			: Expr(multiplicativeExpression), mWhatMultiplicativeExpr(mE), lhs(l), rhs(r) {
+		}
+		
+		whatMultiplicativeExpr mWhatMultiplicativeExpr;
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class AdditiveExpr : protected Expr {
+	public: 
+		AdditiveExpr(whatAdditiveExpr aE, Expr* l, Expr* r)
+			: Expr(additiveExpression), mWhatAdditiveExpr(aE), lhs(l), rhs(r) {
+		}
+		
+		whatAdditiveExpr mWhatAdditiveExpr;
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class ShiftExpr : protected Expr {
+	public: 
+		ShiftExpr(whatShiftExpr sE, Expr* l, Expr* r)
+			: Expr(shiftExpression), mWhatShiftExpr(sE), lhs(l), rhs(r) {
+		}
+		
+		whatShiftExpr mWhatShiftExpr;
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class RelationalExpr : protected Expr {
+	public: 
+		RelationalExpr(whatRelationalExpr rE, Expr* l, Expr* r)
+			: Expr(relationalExpression), mWhatRelationalExpr(rE), lhs(l), rhs(r) {
+		}
+		
+		whatRelationalExpr mWhatRelationalExpr;
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class EqualityExpr : protected Expr {
+	public: 
+		EqualityExpr(whatEqualityExpr eE, Expr* l, Expr* r)
+			: Expr(equalityExpression), mWhatEqualityExpr(eE), lhs(l), rhs(r) {
+		}
+		
+		whatEqualityExpr mWhatEqualityExpr;
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class BitwiseAndExpr : protected Expr {
+	public: 
+		BitwiseAndExpr(Expr* l, Expr* r)
+			: Expr(bitwiseAndExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class BitwiseXOrExpr : protected Expr {
+	public: 
+		BitwiseXOrExpr(Expr* l, Expr* r)
+			: Expr(bitwiseXOrExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class BitwiseOrExpr : protected Expr {
+	public: 
+		BitwiseOrExpr(Expr* l, Expr* r)
+			: Expr(bitwiseOrExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class LogicalAndExpr : protected Expr {
+	public: 
+		LogicalAndExpr(Expr* l, Expr* r)
+			: Expr(logicalAndExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class LogicalOrExpr : protected Expr {
+	public: 
+		LogicalOrExpr(Expr* l, Expr* r)
+			: Expr(logicalOrExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
+};
+
+class ConditionalExpr : protected Expr {
+	public: 
+		ConditionalExpr(Expr* cond, Expr* tB, Expr* fB)
+			: Expr(conditionalExpression), condition(cond), trueBranch(tB), falseBranch(fB) {
+		}
+		
+		Expr* condition;
+		Expr* trueBranch;
+		Expr* falseBranch;
+};
+
+class AssignmentExpr : protected Expr {
+	public: 
+		AssignmentExpr(Expr* l, Expr* r)
+			: Expr(assignmentExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
 };
 
 #endif
