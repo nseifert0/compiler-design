@@ -6,6 +6,24 @@
 
 enum whatExpr {
 	exprIsTest,
+	/*primaryExpression;
+	postfixExpression;
+	argumentList;
+	unaryExpression;
+	castExpression;
+	multiplicativeExpression;
+	additiveExpression;
+	shiftExpression;
+	relationalExpression;
+	equalityExpression;
+	bitwiseAndExpression;
+	bitwiseXorExpression;
+	bitwiseOrExpression;
+	logicalAndExpression;
+	logicalOrExpression;
+	conditionalExpression;
+	assignmentExpression;
+	*/
 };
 
 class Expr {
