@@ -6,6 +6,9 @@
 
 #include "lexer.hpp"
 #include "type.hpp"
+#include "expr.hpp"
+#include "stmt.hpp"
+#include "decl.hpp"
 
 #include <deque>
 
