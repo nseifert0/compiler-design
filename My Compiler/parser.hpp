@@ -4,6 +4,7 @@
 #ifndef PARSER_HPP
 #define PARSER_HPP
 
+#include "semantics.hpp"
 #include "lexer.hpp"
 #include "type.hpp"
 #include "expr.hpp"
