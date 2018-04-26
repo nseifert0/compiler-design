@@ -30,7 +30,10 @@ enum whatExpr {
 };
 
 enum whatPrimaryExpr {
-	literal,
+	booleanLiteral,
+	characterLiteral,
+	integerLiteral,
+	floatLiteral,
 	identifier,
 	parenthesizedPrimary
 };
@@ -77,18 +80,6 @@ enum whatEqualityExpr {
 	notEqual
 };
 
-enum whatLiteralExpr {
-	eBool,
-	eInt,
-	eFloat
-};
-
-union LiteralValue {
-	char charValue;
-	int intValue;
-	double floatValue;
-};
-
 class Expr {
 	public:
 		Expr(whatExpr e)
@@ -108,20 +99,28 @@ class PrimaryExpr : public Expr {
 		whatPrimaryExpr mWhatPrimaryExpr;
 };
 
-class LiteralExpr : public PrimaryExpr {
+class BooleanLiteralExpr : public PrimaryExpr {
 	public:
-		LiteralExpr(whatLiteralExpr lE, LiteralValue v)
-			: PrimaryExpr(literal), value(v) {
+		BooleanLiteralExpr(bool bV)
+			: PrimaryExpr(booleanLiteral), boolValue(bV) {
 		}
-		
-		whatLiteralExpr mWhatLiteralExpr;
-		LiteralValue value;
+
+		bool boolValue;
+};
+
+class IntegerLiteralExpr : public PrimaryExpr {
+	public:
+		IntegerLiteralExpr(int iV)
+			: PrimaryExpr(integerLiteral), intValue(iV) {
+		}
+
+		int intValue;
 };
 
 class IdentifierExpr : public PrimaryExpr {
 	public:
 		IdentifierExpr()
-			: PrimaryExpr(literal) {
+			: PrimaryExpr(identifier) {
 		}
 };
 

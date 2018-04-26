@@ -33,8 +33,7 @@ class Semantics {
 		Expr* primaryExpression(Token t) {
 			switch(t.name) {
 				case Decimal_Integer_Literal:
-					LiteralValue lV = {t.integerValue};
-					return new LiteralExpr(eInt, lV);
+					return new IntegerLiteralExpr(t.integerValue);
 					break;
 				/*
 				case Hexadecimal_Integer_Literal:
