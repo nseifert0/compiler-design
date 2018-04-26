@@ -421,20 +421,22 @@ Stmt* Parser::parseExpressionStatement() {
 
 //------------------------------------------------------------------------------
 //Parsing Declarations
-void Parser::parseProgram() {
+Decl* Parser::parseProgram() {
 	if(!lexer.eof()) {
 		parseDeclarationSeq();
 	}
+	return new Decl(declIsTest);
 }
 
-void Parser::parseDeclarationSeq() {
+Decl* Parser::parseDeclarationSeq() {
 	parseDeclaration();
 	while(!lexer.eof()) {
 		parseDeclaration();
 	}
+	return new Decl(declIsTest);
 }
 
-void Parser::parseDeclaration() {
+Decl* Parser::parseDeclaration() {
 	switch(lookAhead(2).name) {
 		case Left_Paren:
 			parseFunctionDefinition();
@@ -443,13 +445,15 @@ void Parser::parseDeclaration() {
 			parseObjectDefinition();
 			break;
 	}
+	return new Decl(declIsTest);
 }
 
-void Parser::parseLocalDeclaration() {
+Decl* Parser::parseLocalDeclaration() {
 	parseObjectDefinition();
+	return new Decl(declIsTest);
 }
 
-void Parser::parseObjectDefinition() {
+Decl* Parser::parseObjectDefinition() {
 	switch(lookAhead(0).name) {
 		case Keyword_Var:
 			parseVariableDefinition();
@@ -461,9 +465,10 @@ void Parser::parseObjectDefinition() {
 			parseValueDefinition();
 			break;
 	}
+	return new Decl(declIsTest);
 }
 
-void Parser::parseVariableDefinition() {
+Decl* Parser::parseVariableDefinition() {
 	acceptSpecific(Keyword_Var);
 	acceptSpecific(Identifier);
 	acceptSpecific(Colon);
@@ -478,9 +483,10 @@ void Parser::parseVariableDefinition() {
 			acceptSpecific(Semicolon);
 			break;
 	}
+	return new Decl(declIsTest);
 }
 
-void Parser::parseConstantDefinition() {
+Decl* Parser::parseConstantDefinition() {
 	acceptSpecific(Keyword_Let);
 	acceptSpecific(Identifier);
 	acceptSpecific(Colon);
@@ -488,9 +494,10 @@ void Parser::parseConstantDefinition() {
 	acceptSpecific(Assignment_Operator);
 	parseExpression();
 	acceptSpecific(Semicolon);
+	return new Decl(declIsTest);
 }
 
-void Parser::parseValueDefinition() {
+Decl* Parser::parseValueDefinition() {
 	acceptSpecific(Keyword_Def);
 	acceptSpecific(Identifier);
 	acceptSpecific(Colon);
@@ -498,9 +505,10 @@ void Parser::parseValueDefinition() {
 	acceptSpecific(Assignment_Operator);
 	parseExpression();
 	acceptSpecific(Semicolon);
+	return new Decl(declIsTest);
 }
 
-void Parser::parseFunctionDefinition() {
+Decl* Parser::parseFunctionDefinition() {
 	acceptSpecific(Keyword_Def);
 	acceptSpecific(Identifier);
 	acceptSpecific(Left_Paren);
@@ -512,20 +520,22 @@ void Parser::parseFunctionDefinition() {
 	//acceptSpecific(Arrow_Operator);
 	parseType();
 	parseBlockStatement();
+	return new Decl(declIsTest);
 	
 }
 
-void Parser::parseParameterList() {
+Decl* Parser::parseParameterList() {
 	parseParameter();
 	while(lookAhead(0).name != Right_Paren) {
 		parseParameter();
 	}
 }
 
-void Parser::parseParameter() {
+Decl* Parser::parseParameter() {
 	acceptSpecific(Identifier);
 	acceptSpecific(Colon);
 	parseType();
+	return new Decl(declIsTest);
 }
 
 //------------------------------------------------------------------------------

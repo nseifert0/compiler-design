@@ -62,17 +62,17 @@ class Parser {
 		Stmt* parseExpressionStatement();
 		
 		//Parsing Declarations
-		void parseProgram();
-		void parseDeclarationSeq();
-		void parseDeclaration();
-		void parseLocalDeclaration();
-		void parseObjectDefinition();
-		void parseVariableDefinition();
-		void parseConstantDefinition();
-		void parseValueDefinition();
-		void parseFunctionDefinition();
-		void parseParameterList();
-		void parseParameter();
+		Decl* parseProgram();
+		Decl* parseDeclarationSeq();
+		Decl* parseDeclaration();
+		Decl* parseLocalDeclaration();
+		Decl* parseObjectDefinition();
+		Decl* parseVariableDefinition();
+		Decl* parseConstantDefinition();
+		Decl* parseValueDefinition();
+		Decl* parseFunctionDefinition();
+		Decl* parseParameterList();
+		Decl* parseParameter();
 	
 	private:
 		Lexer lexer;
