@@ -40,15 +40,16 @@ Type* Parser::parseBasicType() {
 	}
 }
 
-void Parser::parseTypeList() {
+Type* Parser::parseTypeList() {
 	parseType();
 	while(lookAhead(0).name == Comma) {
 		accept();
 		parseType();
 	}
+	return new Type(typeIsTest);
 }
 
-void Parser::parsePostfixType() {
+Type* Parser::parsePostfixType() {
 	parseBasicType();
 	while(checkIfPostfixType()) {
 		if(lookAhead(0).name == Left_Bracket) {
@@ -65,9 +66,10 @@ void Parser::parsePostfixType() {
 			accept();
 		}
 	}
+	return new Type(typeIsTest);
 }
 
-void Parser::parseReferenceType() {
+Type* Parser::parseReferenceType() {
 	parsePostfixType();
 	while(lookAhead(0).name == Bitwise_Operator) {
 		if(lookAhead(0).bot == Bitwise_And) {
@@ -77,10 +79,12 @@ void Parser::parseReferenceType() {
 			break;
 		}
 	}
+	return new Type(typeIsTest);
 }
 
-void Parser::parseType() {
+Type* Parser::parseType() {
 	parsePostfixType();
+	return new Type(typeIsTest);
 }
 
 //------------------------------------------------------------------------------

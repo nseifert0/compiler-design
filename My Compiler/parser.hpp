@@ -22,10 +22,10 @@ class Parser {
 		
 		//Parsing Types
 		Type* parseBasicType();
-		void parseTypeList();
-		void parsePostfixType();
-		void parseReferenceType();
-		void parseType();
+		Type* parseTypeList();
+		Type* parsePostfixType();
+		Type* parseReferenceType();
+		Type* parseType();
 		
 		//Parsing Expressions
 		void parsePrimaryExpression();
