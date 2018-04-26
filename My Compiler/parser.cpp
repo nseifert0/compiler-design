@@ -89,7 +89,7 @@ Type* Parser::parseType() {
 
 //------------------------------------------------------------------------------
 //Parsing Expressions
-void Parser::parsePrimaryExpression() {
+Expr* Parser::parsePrimaryExpression() {
 	switch(lookAhead(0).name) {
 		case Decimal_Integer_Literal:
 		case Hexadecimal_Integer_Literal:
@@ -100,7 +100,7 @@ void Parser::parsePrimaryExpression() {
 		case String_Literal:
 		case Identifier:
 			accept();
-			return;
+			return new Expr(exprIsTest);
 		
 		case Left_Paren:
 			accept();
@@ -112,10 +112,10 @@ void Parser::parsePrimaryExpression() {
 			ss << "Syntax Error";
 			throw std::runtime_error(ss.str());
 	}
-	
+	return new Expr(exprIsTest);
 }
 
-void Parser::parsePostfixExpression() {
+Expr* Parser::parsePostfixExpression() {
 	parsePrimaryExpression();
 	switch(lookAhead(0).name) {
 		case Left_Paren:
@@ -135,78 +135,86 @@ void Parser::parsePostfixExpression() {
 		default:
 			break;
 	}
-	
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseArgumentList() {
+Expr* Parser::parseArgumentList() {
 	parseArgument();
 	while(lookAhead(0).name == Comma) {
 		accept();
 		parseArgument();
 	}
-	
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseArgument() {
+Expr* Parser::parseArgument() {
 	parseExpression();
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseUnaryExpression() {
+Expr* Parser::parseUnaryExpression() {
 	while(checkIfUnaryExpression()) {
 		accept();
 	}
 	parsePostfixExpression();
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseCastExpression() {
+Expr* Parser::parseCastExpression() {
 	parseUnaryExpression();
 	while(lookAhead(0).name == Keyword_As) {
 		accept();
 		parseType();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseMultiplicativeExpression() {
+Expr* Parser::parseMultiplicativeExpression() {
 	parseCastExpression();
 	while(checkIfMultiplicativeExpression()) {
 		accept();
 		parseCastExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseAdditiveExpression() {
+Expr* Parser::parseAdditiveExpression() {
 	parseMultiplicativeExpression();
 	while(checkIfAdditiveExpression()) {
 		accept();
 		parseMultiplicativeExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseShiftExpression() {
+Expr* Parser::parseShiftExpression() {
 	parseAdditiveExpression();
 	while(lookAhead(0).name == Shift_Operator) {
 		accept();
 		parseAdditiveExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseRelationalExpression() {
+Expr* Parser::parseRelationalExpression() {
 	parseShiftExpression();
 	while(checkIfRelationalExpression()) {
 		accept();
 		parseShiftExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseEqualityExpression() {
+Expr* Parser::parseEqualityExpression() {
 	parseRelationalExpression();
 	while(checkIfEqualityExpression()) {
 		accept();
 		parseRelationalExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseBitwiseAndExpression() {
+Expr* Parser::parseBitwiseAndExpression() {
 	parseEqualityExpression();
 	while(lookAhead(0).name == Bitwise_Operator) {
 		if(lookAhead(0).bot == Bitwise_And) {
@@ -217,9 +225,10 @@ void Parser::parseBitwiseAndExpression() {
 			break;
 		}
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseBitwiseXorExpression() {
+Expr* Parser::parseBitwiseXorExpression() {
 	parseBitwiseAndExpression();
 	while(lookAhead(0).name == Bitwise_Operator) {
 		if(lookAhead(0).bot == Bitwise_XOr) {
@@ -230,9 +239,10 @@ void Parser::parseBitwiseXorExpression() {
 			break;
 		}
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseBitwiseOrExpression() {
+Expr* Parser::parseBitwiseOrExpression() {
 	parseBitwiseXorExpression();
 	while(lookAhead(0).name == Bitwise_Operator) {
 		if(lookAhead(0).bot == Bitwise_Or) {
@@ -243,9 +253,10 @@ void Parser::parseBitwiseOrExpression() {
 			break;
 		}
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseLogicalAndExpression() {
+Expr* Parser::parseLogicalAndExpression() {
 	parseBitwiseOrExpression();
 	while(lookAhead(0).name == Logical_Operator) {
 		if(lookAhead(0).lot == And) {
@@ -256,9 +267,10 @@ void Parser::parseLogicalAndExpression() {
 			break;
 		}
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseLogicalOrExpression() {
+Expr* Parser::parseLogicalOrExpression() {
 	parseLogicalAndExpression();
 	while(lookAhead(0).name == Logical_Operator) {
 		if(lookAhead(0).lot == Or) {
@@ -269,9 +281,10 @@ void Parser::parseLogicalOrExpression() {
 			break;
 		}
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseConditionalExpression() {
+Expr* Parser::parseConditionalExpression() {
 	parseLogicalOrExpression();
 	if(lookAhead(0).name == Conditional_Operator) {
 		accept();
@@ -279,22 +292,26 @@ void Parser::parseConditionalExpression() {
 		acceptSpecific(Colon);
 		parseConditionalExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseAssignmentExpression() {
+Expr* Parser::parseAssignmentExpression() {
 	parseConditionalExpression();
 	while(lookAhead(0).name == Assignment_Operator) {
 		accept();
 		parseConditionalExpression();
 	}
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseExpression() {
+Expr* Parser::parseExpression() {
 	parseAssignmentExpression();
+	return new Expr(exprIsTest);
 }
 
-void Parser::parseConstantExpression() {
+Expr* Parser::parseConstantExpression() {
 	parseConditionalExpression();
+	return new Expr(exprIsTest);
 }
 
 

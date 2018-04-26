@@ -28,26 +28,26 @@ class Parser {
 		Type* parseType();
 		
 		//Parsing Expressions
-		void parsePrimaryExpression();
-		void parsePostfixExpression();
-		void parseArgumentList();
-		void parseArgument();
-		void parseUnaryExpression();
-		void parseCastExpression();
-		void parseMultiplicativeExpression();
-		void parseAdditiveExpression();
-		void parseShiftExpression();
-		void parseRelationalExpression();
-		void parseEqualityExpression();
-		void parseBitwiseAndExpression();
-		void parseBitwiseXorExpression();
-		void parseBitwiseOrExpression();
-		void parseLogicalAndExpression();
-		void parseLogicalOrExpression();
-		void parseConditionalExpression();
-		void parseAssignmentExpression();
-		void parseExpression();
-		void parseConstantExpression();
+		Expr* parsePrimaryExpression();
+		Expr* parsePostfixExpression();
+		Expr* parseArgumentList();
+		Expr* parseArgument();
+		Expr* parseUnaryExpression();
+		Expr* parseCastExpression();
+		Expr* parseMultiplicativeExpression();
+		Expr* parseAdditiveExpression();
+		Expr* parseShiftExpression();
+		Expr* parseRelationalExpression();
+		Expr* parseEqualityExpression();
+		Expr* parseBitwiseAndExpression();
+		Expr* parseBitwiseXorExpression();
+		Expr* parseBitwiseOrExpression();
+		Expr* parseLogicalAndExpression();
+		Expr* parseLogicalOrExpression();
+		Expr* parseConditionalExpression();
+		Expr* parseAssignmentExpression();
+		Expr* parseExpression();
+		Expr* parseConstantExpression();
 	
 		//Parsing Statements
 		void parseStatement();
