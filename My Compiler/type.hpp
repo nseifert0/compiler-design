@@ -43,7 +43,7 @@ class Type {
 };
 
 
-class BasicType : protected Type {
+class BasicType : public Type {
 	public:
 		BasicType(whatBasicType bT)
 			: Type(basic), mWhatBasicType(bT) {
@@ -52,7 +52,7 @@ class BasicType : protected Type {
 		whatBasicType mWhatBasicType;
 };
 
-class PostfixType : protected Type {
+class PostfixType : public Type {
 	public:
 		PostfixType(whatPostfixType pT, Type* base)
 			: Type(postfix), mWhatPostfixType(pT), baseType(base) {
@@ -63,7 +63,7 @@ class PostfixType : protected Type {
 };
 
 
-class ArrayWithArgumentType : protected PostfixType {
+class ArrayWithArgumentType : public PostfixType {
 	public:
 		ArrayWithArgumentType(Expr* arg, Type* base)
 			: PostfixType(arrayWithArgument, base), argument(arg) {
@@ -75,7 +75,7 @@ class ArrayWithArgumentType : protected PostfixType {
 
 //Implement function type class that extends the BasicType
 
-class ReferenceType : protected Type {
+class ReferenceType : public Type {
 	public:
 		ReferenceType(Type* refs)
 			: Type(reference), baseType(refs) {

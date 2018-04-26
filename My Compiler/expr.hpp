@@ -99,7 +99,7 @@ class Expr {
 		whatExpr mWhatExpr;		
 };
 
-class PrimaryExpr : protected Expr {
+class PrimaryExpr : public Expr {
 	public:
 		PrimaryExpr(whatPrimaryExpr pE)
 			: Expr(primaryExpression), mWhatPrimaryExpr(pE) {
@@ -108,7 +108,7 @@ class PrimaryExpr : protected Expr {
 		whatPrimaryExpr mWhatPrimaryExpr;
 };
 
-class LiteralExpr : protected PrimaryExpr {
+class LiteralExpr : public PrimaryExpr {
 	public:
 		LiteralExpr(whatLiteralExpr lE, LiteralValue v)
 			: PrimaryExpr(literal), value(v) {
@@ -118,14 +118,14 @@ class LiteralExpr : protected PrimaryExpr {
 		LiteralValue value;
 };
 
-class IdentifierExpr : protected PrimaryExpr {
+class IdentifierExpr : public PrimaryExpr {
 	public:
 		IdentifierExpr()
 			: PrimaryExpr(literal) {
 		}
 };
 
-class ParenthesizedPrimaryExpr : protected PrimaryExpr {
+class ParenthesizedPrimaryExpr : public PrimaryExpr {
 	public:
 		ParenthesizedPrimaryExpr(Expr* e)
 			: PrimaryExpr(parenthesizedPrimary), innerExpr(e) {
@@ -134,7 +134,7 @@ class ParenthesizedPrimaryExpr : protected PrimaryExpr {
 		Expr* innerExpr;
 };
 
-class ArgumentListExpr : protected Expr {
+class ArgumentListExpr : public Expr {
 	public:
 		ArgumentListExpr(Expr* l, Expr* r)
 			: Expr(argumentList), lhs(l), rhs(r) {
@@ -144,7 +144,7 @@ class ArgumentListExpr : protected Expr {
 		Expr* rhs;
 };
 
-class UnaryOperatorExpr :  protected Expr {
+class UnaryOperatorExpr :  public Expr {
 	public:
 		UnaryOperatorExpr(whatUnaryExpr uE, Expr* arg)
 			: Expr(unaryExpression), mWhatUnaryExpr(uE), argument(arg) {
@@ -154,7 +154,7 @@ class UnaryOperatorExpr :  protected Expr {
 		Expr* argument;
 };
 
-class CastExpr : protected Expr {
+class CastExpr : public Expr {
 	public:
 		CastExpr(Expr* arg, Type* cT)
 			: Expr(castExpression), argument(arg), castType(cT) {
@@ -164,7 +164,7 @@ class CastExpr : protected Expr {
 		Type* castType;
 };
 
-class MultiplicativeExpr : protected Expr {
+class MultiplicativeExpr : public Expr {
 	public: 
 		MultiplicativeExpr(whatMultiplicativeExpr mE, Expr* l, Expr* r)
 			: Expr(multiplicativeExpression), mWhatMultiplicativeExpr(mE), lhs(l), rhs(r) {
@@ -175,7 +175,7 @@ class MultiplicativeExpr : protected Expr {
 		Expr* rhs;
 };
 
-class AdditiveExpr : protected Expr {
+class AdditiveExpr : public Expr {
 	public: 
 		AdditiveExpr(whatAdditiveExpr aE, Expr* l, Expr* r)
 			: Expr(additiveExpression), mWhatAdditiveExpr(aE), lhs(l), rhs(r) {
@@ -186,7 +186,7 @@ class AdditiveExpr : protected Expr {
 		Expr* rhs;
 };
 
-class ShiftExpr : protected Expr {
+class ShiftExpr : public Expr {
 	public: 
 		ShiftExpr(whatShiftExpr sE, Expr* l, Expr* r)
 			: Expr(shiftExpression), mWhatShiftExpr(sE), lhs(l), rhs(r) {
@@ -197,7 +197,7 @@ class ShiftExpr : protected Expr {
 		Expr* rhs;
 };
 
-class RelationalExpr : protected Expr {
+class RelationalExpr : public Expr {
 	public: 
 		RelationalExpr(whatRelationalExpr rE, Expr* l, Expr* r)
 			: Expr(relationalExpression), mWhatRelationalExpr(rE), lhs(l), rhs(r) {
@@ -208,7 +208,7 @@ class RelationalExpr : protected Expr {
 		Expr* rhs;
 };
 
-class EqualityExpr : protected Expr {
+class EqualityExpr : public Expr {
 	public: 
 		EqualityExpr(whatEqualityExpr eE, Expr* l, Expr* r)
 			: Expr(equalityExpression), mWhatEqualityExpr(eE), lhs(l), rhs(r) {
@@ -219,7 +219,7 @@ class EqualityExpr : protected Expr {
 		Expr* rhs;
 };
 
-class BitwiseAndExpr : protected Expr {
+class BitwiseAndExpr : public Expr {
 	public: 
 		BitwiseAndExpr(Expr* l, Expr* r)
 			: Expr(bitwiseAndExpression), lhs(l), rhs(r) {
@@ -229,7 +229,7 @@ class BitwiseAndExpr : protected Expr {
 		Expr* rhs;
 };
 
-class BitwiseXOrExpr : protected Expr {
+class BitwiseXOrExpr : public Expr {
 	public: 
 		BitwiseXOrExpr(Expr* l, Expr* r)
 			: Expr(bitwiseXOrExpression), lhs(l), rhs(r) {
@@ -239,7 +239,7 @@ class BitwiseXOrExpr : protected Expr {
 		Expr* rhs;
 };
 
-class BitwiseOrExpr : protected Expr {
+class BitwiseOrExpr : public Expr {
 	public: 
 		BitwiseOrExpr(Expr* l, Expr* r)
 			: Expr(bitwiseOrExpression), lhs(l), rhs(r) {
@@ -249,7 +249,7 @@ class BitwiseOrExpr : protected Expr {
 		Expr* rhs;
 };
 
-class LogicalAndExpr : protected Expr {
+class LogicalAndExpr : public Expr {
 	public: 
 		LogicalAndExpr(Expr* l, Expr* r)
 			: Expr(logicalAndExpression), lhs(l), rhs(r) {
@@ -259,7 +259,7 @@ class LogicalAndExpr : protected Expr {
 		Expr* rhs;
 };
 
-class LogicalOrExpr : protected Expr {
+class LogicalOrExpr : public Expr {
 	public: 
 		LogicalOrExpr(Expr* l, Expr* r)
 			: Expr(logicalOrExpression), lhs(l), rhs(r) {
@@ -269,7 +269,7 @@ class LogicalOrExpr : protected Expr {
 		Expr* rhs;
 };
 
-class ConditionalExpr : protected Expr {
+class ConditionalExpr : public Expr {
 	public: 
 		ConditionalExpr(Expr* cond, Expr* tB, Expr* fB)
 			: Expr(conditionalExpression), condition(cond), trueBranch(tB), falseBranch(fB) {
@@ -280,7 +280,7 @@ class ConditionalExpr : protected Expr {
 		Expr* falseBranch;
 };
 
-class AssignmentExpr : protected Expr {
+class AssignmentExpr : public Expr {
 	public: 
 		AssignmentExpr(Expr* l, Expr* r)
 			: Expr(assignmentExpression), lhs(l), rhs(r) {

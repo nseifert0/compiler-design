@@ -20,8 +20,7 @@ Type* Parser::parseBasicType() {
 		case Keyword_Int:
 		case Keyword_Float:
 		case Keyword_Char:
-			accept();
-			return new Type(typeIsTest);
+			return semantics.basicType(accept());
 		
 		
 		//Not sure what to do here based upon the language description, is there an -> operator?

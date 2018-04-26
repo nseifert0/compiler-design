@@ -77,6 +77,7 @@ class Parser {
 	
 	private:
 		Lexer lexer;
+		Semantics semantics;
 		std::deque<Token> tokenQueue;
 		
 		//Parser Utilities
