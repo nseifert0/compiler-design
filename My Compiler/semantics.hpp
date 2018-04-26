@@ -35,29 +35,24 @@ class Semantics {
 				case Decimal_Integer_Literal:
 					return new IntegerLiteralExpr(t.integerValue);
 					break;
-				/*
 				case Hexadecimal_Integer_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
+					return new IntegerLiteralExpr(t.integerValue);
 					break;
 				case Binary_Integer_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
+					return new IntegerLiteralExpr(t.integerValue);
 					break;
 				case Floating_Point_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
+					return new FloatLiteralExpr(t.floatValue);
 					break;
 				case Boolean_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
+					if (t.blt == True)
+						return new BooleanLiteralExpr(true);
+					else
+						return new BooleanLiteralExpr(false);
 					break;
 				case Character_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
+					return new CharacterLiteralExpr(t.charVal);
 					break;
-				case String_Literal:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
-					break;
-				case Identifier:
-					return new LiteralExpr(eInt, LiteralValue(t.integerValue));
-					break;
-				*/
 			}
 		};
 };

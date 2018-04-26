@@ -117,6 +117,24 @@ class IntegerLiteralExpr : public PrimaryExpr {
 		int intValue;
 };
 
+class FloatLiteralExpr : public PrimaryExpr {
+	public:
+		FloatLiteralExpr(double fV)
+			: PrimaryExpr(floatLiteral), floatValue(fV) {
+		}
+
+		double floatValue;
+};
+
+class CharacterLiteralExpr : public PrimaryExpr {
+	public:
+		CharacterLiteralExpr(int cV)
+			: PrimaryExpr(characterLiteral), charValue(cV) {
+		}
+
+		char charValue;
+};
+
 class IdentifierExpr : public PrimaryExpr {
 	public:
 		IdentifierExpr()
