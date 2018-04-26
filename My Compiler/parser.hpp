@@ -50,16 +50,16 @@ class Parser {
 		Expr* parseConstantExpression();
 	
 		//Parsing Statements
-		void parseStatement();
-		void parseBlockStatement();
-		void parseStatementSeq();
-		void parseIfStatement();
-		void parseWhileStatement();
-		void parseBreakStatement();
-		void parseContinueStatement();
-		void parseReturnStatement();
-		void parseDeclarationStatement();
-		void parseExpressionStatement();
+		Stmt* parseStatement();
+		Stmt* parseBlockStatement();
+		Stmt* parseStatementSeq();
+		Stmt* parseIfStatement();
+		Stmt* parseWhileStatement();
+		Stmt* parseBreakStatement();
+		Stmt* parseContinueStatement();
+		Stmt* parseReturnStatement();
+		Stmt* parseDeclarationStatement();
+		Stmt* parseExpressionStatement();
 		
 		//Parsing Declarations
 		void parseProgram();

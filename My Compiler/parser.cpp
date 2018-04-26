@@ -317,7 +317,7 @@ Expr* Parser::parseConstantExpression() {
 
 //------------------------------------------------------------------------------
 //Parsing Statements
-void Parser::parseStatement() {
+Stmt* Parser::parseStatement() {
 	switch(lookAhead(0).name) {
 		case Right_Bracket:
 			parseBlockStatement();
@@ -343,26 +343,29 @@ void Parser::parseStatement() {
 			parseExpressionStatement();
 			break;
 	}
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseBlockStatement() {
+Stmt* Parser::parseBlockStatement() {
 	acceptSpecific(Left_Bracket);
 	if(lookAhead(0).name != Right_Bracket) {
 		parseStatementSeq();
 	}
 	acceptSpecific(Right_Bracket);
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseStatementSeq() {
+Stmt* Parser::parseStatementSeq() {
 	//Statement Sequences Only Appear in Block Statements
 	//Block Statements are Surrounded by Brackets.
 	parseStatement();
 	while(lookAhead(0).name != Right_Bracket) {
 		parseStatement();
 	}
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseIfStatement() {
+Stmt* Parser::parseIfStatement() {
 	acceptSpecific(Keyword_If);
 	acceptSpecific(Left_Paren);
 	parseExpression();
@@ -372,41 +375,48 @@ void Parser::parseIfStatement() {
 		accept();
 		parseStatement();
 	}
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseWhileStatement() {
+Stmt* Parser::parseWhileStatement() {
 	acceptSpecific(Keyword_While);
 	acceptSpecific(Left_Paren);
 	parseExpression();
 	acceptSpecific(Right_Paren);
 	parseStatement();
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseBreakStatement() {
+Stmt* Parser::parseBreakStatement() {
 	acceptSpecific(Keyword_Break);
 	acceptSpecific(Semicolon);
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseContinueStatement() {
+Stmt* Parser::parseContinueStatement() {
 	acceptSpecific(Keyword_Continue);
 	acceptSpecific(Semicolon);
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseReturnStatement() {
+Stmt* Parser::parseReturnStatement() {
 	acceptSpecific(Keyword_Return);
 	if(lookAhead(0).name != Semicolon) {
 		parseExpression();
 	}
 	acceptSpecific(Semicolon);
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseDeclarationStatement() {
+Stmt* Parser::parseDeclarationStatement() {
 	parseLocalDeclaration();
+	return new Stmt(stmtIsTest);
 }
 
-void Parser::parseExpressionStatement() {
+Stmt* Parser::parseExpressionStatement() {
 	parseExpression();
 	acceptSpecific(Semicolon);
+	return new Stmt(stmtIsTest);
 }
 
 //------------------------------------------------------------------------------
