@@ -15,7 +15,6 @@ class Decl {
 				
 		}
 		
-	private:
 		whatDecl mDecl;
 		
 };

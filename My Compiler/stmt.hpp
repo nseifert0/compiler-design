@@ -15,7 +15,6 @@ class Stmt {
 				
 		}
 		
-	private:
 		whatStmt mStmt;
 		
 };

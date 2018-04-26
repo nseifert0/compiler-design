@@ -15,7 +15,6 @@ class Expr {
 				
 		}
 		
-	private:
 		whatExpr mExpr;
 		
 };
