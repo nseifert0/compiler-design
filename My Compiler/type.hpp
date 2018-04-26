@@ -6,7 +6,7 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
-#include "expr.hpp"
+class Expr;
 
 enum whatType {
 	typeIsTest,
