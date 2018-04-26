@@ -28,11 +28,11 @@ enum whatExpr {
 enum whatPrimaryExpr {
 	literal,
 	identifier,
-	parenthesizedPrim
+	parenthesizedPrimary
 };
 
 enum whatPostfixExpr {
-	parenthesizedPost,
+	parenthesizedPostfix,
 	bracketed
 };
 
@@ -75,13 +75,21 @@ enum whatEqualityExpr {
 
 class Expr {
 	public:
-		Expr(whatExpr E)
-			: mExpr(E) {
+		Expr(whatExpr e)
+			: mWhatExpr(e) {
 				
 		}
 		
-		whatExpr mExpr;
+		whatExpr mWhatExpr;		
+};
+
+class PrimaryExpr : protected Expr {
+	public:
+		PrimaryExpr(whatPrimaryExpr pE)
+			: Expr(primaryExpression), mWhatPrimaryExpr(pE) {
+		}
 		
+		whatPrimaryExpr mWhatPrimaryExpr;
 };
 
 #endif
