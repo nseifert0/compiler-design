@@ -5,18 +5,20 @@
 #define PARSER_HPP
 
 #include "lexer.hpp"
+#include "type.hpp"
 
 #include <deque>
 
 class Parser {
 	public:
-		Parser(const char* filepath): lexer(filepath) {
+		Parser(const char* filepath)
+			: lexer(filepath) {
 		}
 		
 		void parse();
 		
 		//Parsing Types
-		void parseBasicType();
+		Type* parseBasicType();
 		void parseTypeList();
 		void parsePostfixType();
 		void parseReferenceType();

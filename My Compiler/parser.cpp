@@ -13,7 +13,7 @@ void Parser::parse() {
 
 //------------------------------------------------------------------------------
 //Parsing Types
-void Parser::parseBasicType() {
+Type* Parser::parseBasicType() {
 	switch(lookAhead(0).name) {
 		case Keyword_Void:
 		case Keyword_Bool:
@@ -21,7 +21,7 @@ void Parser::parseBasicType() {
 		case Keyword_Float:
 		case Keyword_Char:
 			accept();
-			return;
+			return new Type(typeIsTest);
 		
 		
 		//Not sure what to do here based upon the language description, is there an -> operator?
@@ -31,7 +31,7 @@ void Parser::parseBasicType() {
 				parseTypeList();
 			}
 			acceptSpecific(Right_Paren);
-			return;
+			return new Type(typeIsTest);
 		
 		default:
 			std::stringstream ss;
