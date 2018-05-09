@@ -12,7 +12,9 @@ enum whatType {
 	typeIsTest,
 	basic,
 	postfix,
-	reference
+	reference,
+	function,
+	typeList
 };
 
 enum whatBasicType {
@@ -50,6 +52,26 @@ class BasicType : public Type {
 		}
 		
 		whatBasicType mWhatBasicType;
+};
+
+class FunctionType : public Type {
+	public:
+		FunctionType(Type* pT, Type* rT)
+			: Type(function), paramaterType(pT), returnType(rT) {
+		}
+		
+		Type* paramaterType;
+		Type* returnType;
+};
+
+class TypeList : public Type {
+	public:
+		TypeList(Type* r, Type* l)
+			: Type(typeList), rhs(r), lhs(l) {
+		}
+		
+		Type* lhs;
+		Type* rhs;
 };
 
 class PostfixType : public Type {
