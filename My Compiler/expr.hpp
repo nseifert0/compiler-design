@@ -171,6 +171,10 @@ class UnaryOperatorExpr :  public Expr {
 		Expr* argument;
 };
 
+class BinaryOperatorExpr : public Expr {
+	
+};
+
 class CastExpr : public Expr {
 	public:
 		CastExpr(Expr* arg, Type* cT)
@@ -305,6 +309,10 @@ class AssignmentExpr : public Expr {
 		
 		Expr* lhs;
 		Expr* rhs;
+};
+
+class CallExpr : public Expr {
+	
 };
 
 #endif

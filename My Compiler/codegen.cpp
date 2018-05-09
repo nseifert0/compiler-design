@@ -44,21 +44,22 @@ struct cg_context
   // Names
 
   /// Returns a name for the declaration.
-  std::string get_name(const decl* d);
+  std::string get_name(const Decl* d);
 
   // Types
 
   /// Generate the corresponding type for `t`.
-  llvm::Type* get_type(const type* t);
-  llvm::Type* get_bool_type(const bool_type* t);
-  llvm::Type* get_char_type(const char_type* t);
-  llvm::Type* get_int_type(const int_type* t);
-  llvm::Type* get_float_type(const float_type* t);
-  llvm::Type* get_ref_type(const ref_type* t);
-  llvm::Type* get_fn_type(const fn_type* t);
+  llvm::Type* get_type(const Type* t);
+  llvm::Type* get_bool_type(const BasicType* t);
+  llvm::Type* get_char_type(const BasicType* t);
+  llvm::Type* get_int_type(const BasicType* t);
+  llvm::Type* get_float_type(const BasicType* t);
+  llvm::Type* get_ref_type(const BasicType* t);
+  llvm::Type* get_fn_type(const BasicType* t);
 
   /// Returns the corresponding type for the declaration `d`.
-  llvm::Type* get_type(const typed_decl* d);
+  //Was typed_decl* instead of Decl*
+  llvm::Type* get_type(const Decl* d);
 
   /// The underlying LLVM context.
   llvm::LLVMContext* ll;
@@ -71,7 +72,7 @@ struct cg_context
 /// and referencing module-level declarations.
 struct cg_module
 {
-  cg_module(cg_context& cxt, const prog_decl* prog);
+  cg_module(cg_context& cxt, const Program* prog);
 
   /// Returns the LLVM context.
   llvm::LLVMContext* get_context() const { return parent->get_context(); }
@@ -82,31 +83,32 @@ struct cg_module
   //  Names
 
   /// Generates a declaration name for `d`.
-  std::string get_name(const decl* d) { return parent->get_name(d); }
+  std::string get_name(const Decl* d) { return parent->get_name(d); }
 
   // Types
 
   /// Generate a corresponding type to `t`.
-  llvm::Type* get_type(const type* t) { return parent->get_type(t); }
+  llvm::Type* get_type(const Type* t) { return parent->get_type(t); }
 
   /// Generates a type corresponding to the type `d`.
-  llvm::Type* get_type(const typed_decl* d) { return parent->get_type(d); }
+  //was typed_decl* instead of Decl*
+  llvm::Type* get_type(const Decl* d) { return parent->get_type(d); }
 
   // Global values
 
   /// Associate the value `v` with the global declaration `d`.
-  void declare(const decl* d, llvm::GlobalValue* v);
+  void declare(const Decl* d, llvm::GlobalValue* v);
 
   /// Returns the global value corresponding to `d` or nullptr.
-  llvm::GlobalValue* lookup(const decl* d) const;
+  llvm::GlobalValue* lookup(const Decl* d) const;
 
   // Declaration generation
 
   /// Process expressions as top-level declarations.
   void generate();
-  void generate(const decl* d);
-  void generate_var_decl(const var_decl* d);
-  void generate_fn_decl(const fn_decl* d);
+  void generate(const Decl* d);
+  void generate_var_decl(const VariableDeclarationWithoutExpression* d);
+  void generate_fn_decl(const FunctionDefinition* d);
 
   /// The parent context.
   cg_context* parent; 
@@ -127,7 +129,7 @@ struct cg_module
 /// Provides the codegen context for expressions.
 struct cg_function
 {
-  cg_function(cg_module& m, const fn_decl* d);
+  cg_function(cg_module& m, const FunctionDefinition* d);
 
   // Context
 
@@ -143,26 +145,27 @@ struct cg_function
   // Names
 
   /// Returns the name for the declaration `d`.
-  std::string get_name(const decl* d) { return parent->get_name(d); }
+  std::string get_name(const Decl* d) { return parent->get_name(d); }
 
   // Types
 
   /// Generates the type corresponding to the expression `e`.
-  llvm::Type* get_type(const type* t) { return parent->get_type(t); }
+  llvm::Type* get_type(const Type* t) { return parent->get_type(t); }
 
   /// Generates the type corresponding to the expression `e`.
-  llvm::Type* get_type(const expr* e) { return get_type(e->get_type()); }
+  llvm::Type* get_type(const Expr* e) { return get_type(e->get_type()); }
 
   /// Generate the corresponding type for `t`.
-  llvm::Type* get_type(const typed_decl* t) { return parent->get_type(t); }
+  //Was typed_decl* instead of Decl*
+  llvm::Type* get_type(const Decl* t) { return parent->get_type(t); }
 
   // Local variables
 
   /// Declare a new local value.
-  void declare(const decl* x, llvm::Value* v);
+  void declare(const Decl* x, llvm::Value* v);
 
   /// Lookup a value. This may return a global value.
-  llvm::Value* lookup(const decl* x) const;
+  llvm::Value* lookup(const Decl* x) const;
 
   // Function definition
 
@@ -186,8 +189,8 @@ struct cg_function
   // Instruction generation
 
   /// Generate a list of instructions to compute the value of e.
-  llvm::Value* generate_expr(const expr* e);
-  llvm::Value* generate_bool_expr(const bool_expr* e);
+  llvm::Value* generate_expr(const Expr* e);
+  llvm::Value* generate_bool_expr(const BooleanLiteralExpr* e);
   llvm::Value* generate_int_expr(const int_expr* e);
   llvm::Value* generate_float_expr(const float_expr* e);
   llvm::Value* generate_id_expr(const id_expr* e);
