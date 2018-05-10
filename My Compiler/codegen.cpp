@@ -594,7 +594,7 @@ void cg_function::generate_block_stmt(const BlockStmt* s) {
 }
 
 void cg_function::generate_when_stmt(const WhenStmt* s) {
-	
+	//Not sure what this is supposed to be
 }
 
 void cg_function::generate_if_stmt(const IfStmt* s) {
@@ -620,15 +620,15 @@ void cg_function::generate_while_stmt(const WhileStmt* s) {
 }
 
 void cg_function::generate_break_stmt(const BreakStmt* e) {
-	
+	//Generate branch to next block
 }
 
 void cg_function::generate_cont_stmt(const ContinueStmt* e) {
-	
+	//Generate branch back to iteration of loop or whatever
 }
 
 void cg_function::generate_ret_stmt(const ReturnStmt* e) {
-	
+	//Generate branch back to previous scope
 }
 
 void cg_function::generate_decl_stmt(const DeclarationStmt* e) {
