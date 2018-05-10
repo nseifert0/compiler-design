@@ -151,7 +151,7 @@ struct cg_function
   llvm::Type* get_type(const Type* t) { return parent->get_type(t); }
 
   /// Generates the type corresponding to the expression `e`.
-  llvm::Type* get_type(const Expr* e) { return get_type(e->get_type()); }
+  llvm::Type* get_type(const Expr* e) { return get_type(e->mType); }
 
   /// Generate the corresponding type for `t`.
   llvm::Type* get_type(const TypedDecl* t) { return parent->get_type(t); }
@@ -259,8 +259,8 @@ struct cg_function
 std::string
 cg_context::get_name(const Decl* d)
 {
-  assert(d->get_name());
-  return *d->get_name();
+  assert(d->name);
+  return *d->name;
 }
 
 /// Generate the corresponding type.
@@ -268,18 +268,18 @@ llvm::Type*
 cg_context::get_type(const Type* t)
 {
   // Make sure we're looking at the semantic, not lexical type.
-  switch (t->get_kind()) {
-  case type::bool_kind:
+  switch (t->mWhatType) {
+  case tBool:
     return get_bool_type(static_cast<const BoolType*>(t));
-  case type::char_kind:
+  case tChar:
     return get_char_type(static_cast<const CharType*>(t));
-  case type::int_kind:
+  case tInt:
     return get_int_type(static_cast<const IntType*>(t));
-  case type::float_kind:
+  case tFloat:
     return get_float_type(static_cast<const FloatType*>(t));
-  case type::ref_kind:
+  case reference:
     return get_ref_type(static_cast<const ReferenceType*>(t));
-  case type::fn_kind:
+  case tFunction:
     return get_fn_type(static_cast<const FunctionType*>(t));
   default:
     throw std::logic_error("invalid type");
@@ -318,7 +318,7 @@ cg_context::get_float_type(const FloatType* t)
 llvm::Type*
 cg_context::get_ref_type(const ReferenceType* t)
 {
-  llvm::Type* obj = get_type(t->get_object_type());
+  llvm::Type* obj = get_type(t->baseType);
   return obj->getPointerTo();
 }
 
@@ -327,12 +327,12 @@ cg_context::get_ref_type(const ReferenceType* t)
 llvm::Type* 
 cg_context::get_fn_type(const FunctionType* t)
 {
-  const type_list& ps = t->get_parameter_types();
+  const TypeList& ps = t->parameterType;
   std::vector<llvm::Type*> parms(ps.size());
-  std::transform(ps.begin(), ps.end(), parms.begin(), [this](const type* p) {
+  std::transform(ps.begin(), ps.end(), parms.begin(), [this](const Type* p) {
     return get_type(p);
   });
-  llvm::Type* ret = get_type(t->get_return_type());
+  llvm::Type* ret = get_type(t->returnType);
   llvm::Type* base = llvm::FunctionType::get(ret, parms, false);
   return base->getPointerTo();
 }
@@ -340,7 +340,7 @@ cg_context::get_fn_type(const FunctionType* t)
 llvm::Type*
 cg_context::get_type(const TypedDecl* d)
 {
-  return get_type(d->get_type());
+  return get_type(d->type);
 }
 
 // -------------------------------------------------------------------------- //
@@ -374,18 +374,18 @@ cg_module::lookup(const Decl* d) const
 void 
 cg_module::generate()
 {
-  for (const Decl* d : prog->get_declarations())
+  for (const Decl* d : prog->declarations)
     generate(d);
 }
 
 void
 cg_module::generate(const Decl* d)
 {
-  switch (d->get_kind()) {
-  case decl::var_kind:
+  switch (d->mWhatDecl) {
+  case variableDefinition:
     return generate_var_decl(static_cast<const VariableDefinitionDecl*>(d));
   
-  case decl::fn_kind:
+  case functionDefinition:
     return generate_fn_decl(static_cast<const FunctionDefinitionDecl*>(d));
 
   default: 
@@ -406,7 +406,7 @@ void
 cg_module::generate_var_decl(const VariableDefinitionDecl* d)
 {
   std::string n = get_name(d);
-  llvm::Type* t = get_type(d->get_type());
+  llvm::Type* t = get_type(d->type);
   llvm::Constant* c = llvm::Constant::getNullValue(t);
   llvm::GlobalVariable* var = new llvm::GlobalVariable(
       *mod, t, false, llvm::GlobalVariable::ExternalLinkage, c, n);
@@ -451,8 +451,8 @@ cg_function::cg_function(cg_module& m, const FunctionDefinitionDecl* d)
   llvm::IRBuilder<> ir(get_current_block());
   
   // Configure function parameters and declare them as locals.
-  assert(d->get_parameters().size() == fn->arg_size());
-  auto pi = d->get_parameters().begin();
+  assert(d->parameters.size() == fn->arg_size());
+  auto pi = d->parameters.begin();
   auto ai = fn->arg_begin();
   while (ai != fn->arg_end()) {
     const ParameterDecl* parm = static_cast<const ParameterDecl*>(*pi);
@@ -509,34 +509,34 @@ cg_function::emit_block(llvm::BasicBlock* bb)
 void
 cg_function::define()
 {
-  generate_stmt(src->get_body());
+  generate_stmt(src->body);
 }
 
 llvm::Value*
 cg_function::generate_expr(const Expr* e)
 {
-  switch (e->get_kind()) {
-  case expr::bool_kind:
+  switch (e->mWhatExpr) {
+  case booleanLiteral:
     return generate_bool_expr(static_cast<const BooleanLiteralExpr*>(e));
-  case expr::int_kind:
+  case integerLiteral:
     return generate_int_expr(static_cast<const IntegerLiteralExpr*>(e));
-  case expr::float_kind:
+  case floatLiteral:
     return generate_float_expr(static_cast<const FloatLiteralExpr*>(e));
-  case expr::id_kind:
+  case identifier:
     return generate_id_expr(static_cast<const IdentifierExpr*>(e));
-  case expr::unop_kind:
+  case unaryExpression:
     return generate_unop_expr(static_cast<const UnaryOperatorExpr*>(e));
-  case expr::binop_kind:
+  case binaryExpression:
     return generate_binop_expr(static_cast<const BinaryOperatorExpr*>(e));
-  case expr::call_kind:
+  case callExpression:
     return generate_call_expr(static_cast<const CallExpr*>(e));
-  case expr::index_kind:
+  case indexExpression:
     return generate_index_expr(static_cast<const IndexExpr*>(e));
-  case expr::cond_kind:
+  case conditionalExpression:
     return generate_cond_expr(static_cast<const ConditionalExpr*>(e));
-  case expr::assign_kind:
+  case assignmentExpression:
     return generate_assign_expr(static_cast<const AssignmentExpr*>(e));
-  case expr::conv_kind:
+  case convExpression:
     return generate_conv_expr(static_cast<const ConvExpr*>(e));
   default: 
     throw std::runtime_error("invalid expression");
@@ -546,19 +546,19 @@ cg_function::generate_expr(const Expr* e)
 llvm::Value*
 cg_function::generate_bool_expr(const BooleanLiteralExpr* e)
 {
-  return llvm::ConstantInt::get(get_type(e), e->get_value(), false);
+  return llvm::ConstantInt::get(get_type(e), e->boolValue, false);
 }
 
 llvm::Value*
 cg_function::generate_int_expr(const IntegerLiteralExpr* e)
 {
-  return llvm::ConstantInt::get(get_type(e), e->get_value(), true);
+  return llvm::ConstantInt::get(get_type(e), e->intValue, true);
 }
 
 llvm::Value*
 cg_function::generate_float_expr(const FloatLiteralExpr* e)
 {
-  return llvm::ConstantFP::get(get_type(e), e->get_value());
+  return llvm::ConstantFP::get(get_type(e), e->floatValue);
 }
 
 llvm::Value*
@@ -652,24 +652,24 @@ cg_function::generate_conv_expr(const ConvExpr* c)
 void
 cg_function::generate_stmt(const Stmt* s)
 {
-  switch (s->get_kind()) {
-  case stmt::block_kind:
+  switch (s->mWhatStmt) {
+  case blockStatement:
     return generate_block_stmt(static_cast<const BlockStmt*>(s));
-  case stmt::when_kind:
+  case whenStatement:
     return generate_when_stmt(static_cast<const WhenStmt*>(s));
-  case stmt::if_kind:
+  case ifStatement:
     return generate_if_stmt(static_cast<const IfStmt*>(s));
-  case stmt::while_kind:
+  case whileStatement:
     return generate_while_stmt(static_cast<const WhileStmt*>(s));
-  case stmt::break_kind:
+  case breakStatement:
     return generate_break_stmt(static_cast<const BreakStmt*>(s));
-  case stmt::cont_kind:
+  case continueStatement:
     return generate_cont_stmt(static_cast<const ContinueStmt*>(s));
-  case stmt::ret_kind:
+  case returnStatement:
     return generate_ret_stmt(static_cast<const ReturnStmt*>(s));
-  case stmt::decl_kind:
+  case declarationStatement:
     return generate_decl_stmt(static_cast<const DeclarationStmt*>(s));
-  case stmt::expr_kind:
+  case expressionStatement:
     return generate_expr_stmt(static_cast<const ExpressionStmt*>(s));
   }
 }
@@ -722,7 +722,7 @@ cg_function::generate_expr_stmt(const ExpressionStmt* e)
 void
 generate(const Decl* d)
 {
-  assert(d->is_program());
+  assert(d->mWhatDecl == program);
   
   // Establish the translation context.
   cg_context cg;

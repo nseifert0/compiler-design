@@ -4,17 +4,20 @@
 #ifndef DECL_HPP
 #define DECL_HPP
 
+#include <vector>
+#include <string>
+
 //Need to fix how identifiers are stored to get this to work
 class Symbol;
 class Type;
 class Expr;
 class Stmt;
 
-
 enum whatDecl {
 	declIsTest,
 	program,
 	declarationSequence,
+	variableDefinition,
 	variableDefinitionWithExpression,
 	variableDefinitionWithoutExpression,
 	constantDefinition,
@@ -31,16 +34,21 @@ class Decl {
 				
 		}
 		
-		whatDecl mWhatDecl;		
+		whatDecl mWhatDecl;
+		//name should correspond to an entry in the symbol table
+		std::string* name = new std::string("");
+		
 };
+
+using DeclList = std::vector<Decl*>;
 
 class ProgramDecl : public Decl {
 	public:
-		ProgramDecl(Decl* d)
-			: Decl(program), declaration(d) {
+		ProgramDecl(DeclList& d)
+			: Decl(program), declarations(d) {
 		}
 		
-		Decl* declaration;
+		DeclList declarations;
 };
 
 class DeclSequence : public Decl {
@@ -54,7 +62,14 @@ class DeclSequence : public Decl {
 };
 
 class VariableDefinitionDecl : public Decl {
-	
+	public:
+		VariableDefinitionDecl(Symbol* i, Type* t, Expr* e)
+			: Decl(variableDefinition), identifier(i), type(t), expression(e) {
+		}
+		
+		Symbol* identifier;
+		Type* type;
+		Expr* expression;
 };
 
 class VariableDefinitionWithExpressionDecl : public Decl {
@@ -102,14 +117,14 @@ class ValueDefinitionDecl : public Decl {
 
 class FunctionDefinitionDecl : public Decl {
 	public:
-		FunctionDefinitionDecl(Symbol* i, Decl* p, Type* t, Stmt* s)
-			: Decl(functionDefinition), identifier(i), parameters(p), type(t), statement(s) {
+		FunctionDefinitionDecl(Symbol* i, DeclList& p, Type* t, Stmt* s)
+			: Decl(functionDefinition), identifier(i), parameters(p), type(t), body(s) {
 		}
 		
 		Symbol* identifier;
-		Decl* parameters;
+		DeclList parameters;
 		Type* type;
-		Stmt* statement;
+		Stmt* body;
 };
 
 class ParameterListDecl : public Decl {
@@ -133,7 +148,13 @@ class ParameterDecl :  public Decl {
 };
 
 class TypedDecl : public Decl { 
-
+	public:
+		TypedDecl(Symbol* i, Type* t)
+			: Decl(parameter), identifier(i), type(t) {
+		}
+		
+		Symbol* identifier;
+		Type* type;
 };
 
 #endif

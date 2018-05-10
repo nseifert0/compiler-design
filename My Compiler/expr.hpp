@@ -10,11 +10,20 @@ class Type;
 
 enum whatExpr {
 	exprIsTest,
-	primaryExpression,
+	booleanLiteral,
+	characterLiteral,
+	integerLiteral,
+	floatLiteral,
+	identifier,
+	parenthesizedPrimary,
 	postfixExpression,
 	argumentList,
 	unaryExpression,
+	binaryExpression,
+	callExpression,
 	castExpression,
+	convExpression,
+	indexExpression,
 	multiplicativeExpression,
 	additiveExpression,
 	shiftExpression,
@@ -27,15 +36,6 @@ enum whatExpr {
 	logicalOrExpression,
 	conditionalExpression,
 	assignmentExpression,
-};
-
-enum whatPrimaryExpr {
-	booleanLiteral,
-	characterLiteral,
-	integerLiteral,
-	floatLiteral,
-	identifier,
-	parenthesizedPrimary
 };
 
 enum whatPostfixExpr {
@@ -87,65 +87,57 @@ class Expr {
 				
 		}
 		
-		whatExpr mWhatExpr;		
+		whatExpr mWhatExpr;	
+		Type* mType = new Type(typeIsTest);
 };
 
-class PrimaryExpr : public Expr {
-	public:
-		PrimaryExpr(whatPrimaryExpr pE)
-			: Expr(primaryExpression), mWhatPrimaryExpr(pE) {
-		}
-		
-		whatPrimaryExpr mWhatPrimaryExpr;
-};
-
-class BooleanLiteralExpr : public PrimaryExpr {
+class BooleanLiteralExpr : public Expr {
 	public:
 		BooleanLiteralExpr(bool bV)
-			: PrimaryExpr(booleanLiteral), boolValue(bV) {
+			: Expr(booleanLiteral), boolValue(bV) {
 		}
 
 		bool boolValue;
 };
 
-class IntegerLiteralExpr : public PrimaryExpr {
+class IntegerLiteralExpr : public Expr {
 	public:
 		IntegerLiteralExpr(int iV)
-			: PrimaryExpr(integerLiteral), intValue(iV) {
+			: Expr(integerLiteral), intValue(iV) {
 		}
 
 		int intValue;
 };
 
-class FloatLiteralExpr : public PrimaryExpr {
+class FloatLiteralExpr : public Expr {
 	public:
 		FloatLiteralExpr(double fV)
-			: PrimaryExpr(floatLiteral), floatValue(fV) {
+			: Expr(floatLiteral), floatValue(fV) {
 		}
 
 		double floatValue;
 };
 
-class CharacterLiteralExpr : public PrimaryExpr {
+class CharacterLiteralExpr : public Expr {
 	public:
 		CharacterLiteralExpr(int cV)
-			: PrimaryExpr(characterLiteral), charValue(cV) {
+			: Expr(characterLiteral), charValue(cV) {
 		}
 
 		char charValue;
 };
 
-class IdentifierExpr : public PrimaryExpr {
+class IdentifierExpr : public Expr {
 	public:
 		IdentifierExpr()
-			: PrimaryExpr(identifier) {
+			: Expr(identifier) {
 		}
 };
 
-class ParenthesizedPrimaryExpr : public PrimaryExpr {
+class ParenthesizedPrimaryExpr : public Expr {
 	public:
 		ParenthesizedPrimaryExpr(Expr* e)
-			: PrimaryExpr(parenthesizedPrimary), innerExpr(e) {
+			: Expr(parenthesizedPrimary), innerExpr(e) {
 		}
 		
 		Expr* innerExpr;
@@ -172,7 +164,13 @@ class UnaryOperatorExpr :  public Expr {
 };
 
 class BinaryOperatorExpr : public Expr {
-	
+	public:
+		BinaryOperatorExpr(Expr* l, Expr* r)
+			: Expr(binaryExpression), lhs(l), rhs(r) {
+		}
+		
+		Expr* lhs;
+		Expr* rhs;
 };
 
 class CastExpr : public Expr {
@@ -312,15 +310,24 @@ class AssignmentExpr : public Expr {
 };
 
 class CallExpr : public Expr {
-	
+	public:
+		CallExpr()
+			: Expr(callExpression) {
+		}
 };
 
 class ConvExpr : public Expr {
-	
+	public:
+		ConvExpr()
+			: Expr(convExpression) {
+		}
 };
 
 class IndexExpr : public Expr {
-	
+	public:
+		IndexExpr()
+			: Expr(indexExpression) {
+		}
 };
 
 #endif

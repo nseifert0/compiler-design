@@ -11,19 +11,19 @@ class Semantics {
 		Type* basicType(Token t) {
 			switch(t.name) {
 				case Keyword_Void:
-					return new BasicType(tVoid);
+					return new VoidType;
 					break;
 				case Keyword_Bool:
-					return new BasicType(tBool);
+					return new BoolType;
 					break;
 				case Keyword_Int:
-					return new BasicType(tInt);
+					return new IntType;
 					break;
 				case Keyword_Float:
-					return new BasicType(tFloat);
+					return new FloatType;
 					break;
 				case Keyword_Char:
-					return new BasicType(tChar);
+					return new CharType;
 					break;
 			}
 		};

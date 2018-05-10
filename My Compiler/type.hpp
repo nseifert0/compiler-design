@@ -6,6 +6,8 @@
 #ifndef TYPE_HPP
 #define TYPE_HPP
 
+#include <vector>
+
 class Expr;
 
 enum whatType {
@@ -14,17 +16,14 @@ enum whatType {
 	postfix,
 	reference,
 	function,
-	typeList
-};
-
-enum whatBasicType {
+	typeList,
 	tVoid,
 	tBool,
 	tInt,
 	tFloat,
 	tChar,
 	tFunction,
-	tParenthesized,
+	tParenthesized
 };
 
 enum whatPostfixType {
@@ -44,50 +43,53 @@ class Type {
 		whatType mWhatType;		
 };
 
+using TypeList = std::vector<Type*>;
 
-class BasicType : public Type {
+class VoidType : public Type {
 	public:
-		BasicType(whatBasicType bT)
-			: Type(basic), mWhatBasicType(bT) {
+		VoidType()
+			: Type(tVoid) {
 		}
-		
-		whatBasicType mWhatBasicType;
 };
 
+
 class BoolType : public Type {
+	public:
+		BoolType()
+			: Type(tBool) {
+		}
 	
 };
 
 class CharType : public Type {
-	
+	public:
+		CharType()
+			: Type(tChar) {
+		}
 };
 
 class IntType : public Type {
-	
+	public:
+		IntType()
+			: Type(tInt) {
+		}
 };
 
 class FloatType : public Type {
-	
+	public:
+		FloatType()
+			: Type(tFloat) {
+		}	
 };
 
 class FunctionType : public Type {
 	public:
-		FunctionType(Type* pT, Type* rT)
-			: Type(function), paramaterType(pT), returnType(rT) {
+		FunctionType(TypeList& pT, Type* rT)
+			: Type(function), parameterType(pT), returnType(rT) {
 		}
 		
-		Type* paramaterType;
+		TypeList parameterType;
 		Type* returnType;
-};
-
-class TypeList : public Type {
-	public:
-		TypeList(Type* r, Type* l)
-			: Type(typeList), rhs(r), lhs(l) {
-		}
-		
-		Type* lhs;
-		Type* rhs;
 };
 
 class PostfixType : public Type {
