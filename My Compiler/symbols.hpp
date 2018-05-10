@@ -24,4 +24,11 @@ class Symbols {
 		int numberOfSymbols;
 };
 
+class Symbol {
+	public:
+		Symbol() {
+			
+		}
+};
+
 #endif

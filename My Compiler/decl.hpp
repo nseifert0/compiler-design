@@ -37,7 +37,7 @@ class Decl {
 		
 		whatDecl mWhatDecl;
 		//name should correspond to an entry in the symbol table
-		std::string* name = new std::string("");
+		std::string* name = new std::string("MyTestName");
 		
 };
 

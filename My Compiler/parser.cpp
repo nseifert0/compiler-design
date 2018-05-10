@@ -441,17 +441,16 @@ DeclList Parser::parseDeclarationSeq() {
 Decl* Parser::parseDeclaration() {
 	switch(lookAhead(2).name) {
 		case Left_Paren:
-			parseFunctionDefinition();
+			return parseFunctionDefinition();
 			break;
 		case Colon:
-			parseObjectDefinition();
+			return parseObjectDefinition();
 			break;
 		default:
 			std::stringstream ss;
 			ss << "Expected a function of object definition";
 			throw std::runtime_error(ss.str());
 	}
-	return new Decl(declIsTest);
 }
 
 Decl* Parser::parseLocalDeclaration() {
@@ -518,15 +517,16 @@ Decl* Parser::parseFunctionDefinition() {
 	acceptSpecific(Keyword_Def);
 	acceptSpecific(Identifier);
 	acceptSpecific(Left_Paren);
+	DeclList dL;
 	if(lookAhead(0).name != Right_Paren) {
-		parseParameterList();
+		//DeclList dL = parseParameterList();
 	}
 	acceptSpecific(Right_Paren);
 	//TODO IMPLEMENT ARROW OPERATOR
 	//acceptSpecific(Arrow_Operator);
-	parseType();
-	parseBlockStatement();
-	return new Decl(declIsTest);
+	Type* t = parseType();
+	Stmt* s = parseBlockStatement();
+	return new FunctionDefinitionDecl(new Symbol, dL, t, s);
 	
 }
 
