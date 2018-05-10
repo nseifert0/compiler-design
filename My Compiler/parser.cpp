@@ -49,7 +49,7 @@ Type* Parser::parseTypeList() {
 }
 
 Type* Parser::parsePostfixType() {
-	parseBasicType();
+	return parseBasicType();
 	while(checkIfPostfixType()) {
 		if(lookAhead(0).name == Left_Bracket) {
 			accept();
@@ -65,7 +65,6 @@ Type* Parser::parsePostfixType() {
 			accept();
 		}
 	}
-	return new Type(typeIsTest);
 }
 
 Type* Parser::parseReferenceType() {
@@ -82,8 +81,7 @@ Type* Parser::parseReferenceType() {
 }
 
 Type* Parser::parseType() {
-	parsePostfixType();
-	return new Type(typeIsTest);
+	return parsePostfixType();
 }
 
 //------------------------------------------------------------------------------
@@ -461,23 +459,26 @@ Decl* Parser::parseLocalDeclaration() {
 Decl* Parser::parseObjectDefinition() {
 	switch(lookAhead(0).name) {
 		case Keyword_Var:
-			parseVariableDefinition();
+			return parseVariableDefinition();
 			break;
 		case Keyword_Let:
-			parseConstantDefinition();
+			return parseConstantDefinition();
 			break;
 		case Keyword_Def:
-			parseValueDefinition();
+			return parseValueDefinition();
 			break;
+		default:
+			std::stringstream ss;
+			ss << "Expected an object definition";
+			throw std::runtime_error(ss.str());
 	}
-	return new Decl(declIsTest);
 }
 
 Decl* Parser::parseVariableDefinition() {
 	acceptSpecific(Keyword_Var);
 	acceptSpecific(Identifier);
 	acceptSpecific(Colon);
-	parseType();
+	Type* t = parseType();
 	switch(lookAhead(0).name) {
 		case Semicolon:
 			accept();
@@ -488,7 +489,7 @@ Decl* Parser::parseVariableDefinition() {
 			acceptSpecific(Semicolon);
 			break;
 	}
-	return new Decl(declIsTest);
+	return new VariableDefinitionDecl(nullptr, t, nullptr);
 }
 
 Decl* Parser::parseConstantDefinition() {
