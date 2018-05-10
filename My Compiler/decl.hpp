@@ -15,6 +15,7 @@ class Stmt;
 
 enum whatDecl {
 	declIsTest,
+	typedDecl,
 	program,
 	declarationSequence,
 	variableDefinition,
@@ -115,15 +116,23 @@ class ValueDefinitionDecl : public Decl {
 		Expr* expression;
 };
 
-class FunctionDefinitionDecl : public Decl {
+class TypedDecl : public Decl { 
 	public:
-		FunctionDefinitionDecl(Symbol* i, DeclList& p, Type* t, Stmt* s)
-			: Decl(functionDefinition), identifier(i), parameters(p), type(t), body(s) {
+		TypedDecl(Symbol* i, Type* t)
+			: Decl(typedDecl), identifier(i), type(t) {
 		}
 		
 		Symbol* identifier;
-		DeclList parameters;
 		Type* type;
+};
+
+class FunctionDefinitionDecl : public TypedDecl {
+	public:
+		FunctionDefinitionDecl(Symbol* i, DeclList& p, Type* t, Stmt* s)
+			: TypedDecl(i, t), parameters(p), body(s) {
+		}
+		
+		DeclList parameters;
 		Stmt* body;
 };
 
@@ -140,16 +149,6 @@ class ParameterListDecl : public Decl {
 class ParameterDecl :  public Decl {
 	public:
 		ParameterDecl(Symbol* i, Type* t)
-			: Decl(parameter), identifier(i), type(t) {
-		}
-		
-		Symbol* identifier;
-		Type* type;
-};
-
-class TypedDecl : public Decl { 
-	public:
-		TypedDecl(Symbol* i, Type* t)
 			: Decl(parameter), identifier(i), type(t) {
 		}
 		
