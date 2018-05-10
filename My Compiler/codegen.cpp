@@ -280,60 +280,46 @@ llvm::Type*  cg_context::get_type(const Type* t) {
 }
 
 /// The corresponding type is i1.
-llvm::Type*
-cg_context::get_bool_type(const BoolType* t)
-{
-  return llvm::Type::getInt1Ty(*ll);
+llvm::Type* cg_context::get_bool_type(const BoolType* t) {
+	return llvm::Type::getInt1Ty(*ll);
 }
 
 /// The corresponding type is i8.
-llvm::Type*
-cg_context::get_char_type(const CharType* t)
-{
-  return llvm::Type::getInt8Ty(*ll);
+llvm::Type* cg_context::get_char_type(const CharType* t) {
+	return llvm::Type::getInt8Ty(*ll);
 }
 
 /// The corresponding type is i32.
-llvm::Type*
-cg_context::get_int_type(const IntType* t)
-{
-  return llvm::Type::getInt32Ty(*ll);
+llvm::Type* cg_context::get_int_type(const IntType* t) {
+	return llvm::Type::getInt32Ty(*ll);
 }
 
 /// The corresponding type is float.
-llvm::Type*
-cg_context::get_float_type(const FloatType* t)
-{
-  return llvm::Type::getFloatTy(*ll);
+llvm::Type* cg_context::get_float_type(const FloatType* t) {
+	return llvm::Type::getFloatTy(*ll);
 }
 
 /// Returns a pointer to the object type.
-llvm::Type*
-cg_context::get_ref_type(const ReferenceType* t)
-{
-  llvm::Type* obj = get_type(t->baseType);
-  return obj->getPointerTo();
+llvm::Type* cg_context::get_ref_type(const ReferenceType* t) {
+	llvm::Type* obj = get_type(t->baseType);
+	return obj->getPointerTo();
 }
 
 /// Generate the type as a pointer. The actual function type can extracted
 /// as needed for creating functions.
-llvm::Type* 
-cg_context::get_fn_type(const FunctionType* t)
-{
-  const TypeList& ps = t->parameterType;
-  std::vector<llvm::Type*> parms(ps.size());
-  std::transform(ps.begin(), ps.end(), parms.begin(), [this](const Type* p) {
-    return get_type(p);
-  });
-  llvm::Type* ret = get_type(t->returnType);
-  llvm::Type* base = llvm::FunctionType::get(ret, parms, false);
-  return base->getPointerTo();
+llvm::Type* cg_context::get_fn_type(const FunctionType* t) {
+	const TypeList& ps = t->parameterType;
+	std::vector<llvm::Type*> parms(ps.size());
+	std::transform(ps.begin(), ps.end(), parms.begin(), [this](const Type* p) {
+		return get_type(p);
+	});
+	llvm::Type* ret = get_type(t->returnType);
+	llvm::Type* base = llvm::FunctionType::get(ret, parms, false);
+	return base->getPointerTo();
 }
 
-llvm::Type*
-cg_context::get_type(const TypedDecl* d)
-{
-  return get_type(d->type);
+llvm::Type* cg_context::get_type(const TypedDecl* d) {
+	return get_type(d->type);
 }
 
 // -------------------------------------------------------------------------- //
@@ -346,257 +332,233 @@ cg_module::cg_module(cg_context& cxt, const ProgramDecl* prog)
     mod(new llvm::Module("a.ll", *get_context()))
 { }
 
-void
-cg_module::declare(const Decl* d, llvm::GlobalValue* v)
-{
-  assert(globals.count(d) == 0);
-  globals.emplace(d, v);
+void cg_module::declare(const Decl* d, llvm::GlobalValue* v) {
+	assert(globals.count(d) == 0);
+	globals.emplace(d, v);
 }
 
-llvm::GlobalValue*
-cg_module::lookup(const Decl* d) const
+llvm::GlobalValue* cg_module::lookup(const Decl* d) const
 {
-  auto iter = globals.find(d);
-  if (iter != globals.end())
-    return llvm::cast<llvm::GlobalValue>(iter->second);
-  else
-    return nullptr;
+	auto iter = globals.find(d);
+	if (iter != globals.end()) {
+		return llvm::cast<llvm::GlobalValue>(iter->second);
+	}
+	else {
+		return nullptr;
+	}
 }
 
 /// Process top-level declarations.
-void 
-cg_module::generate()
-{
-  for (const Decl* d : prog->declarations)
-    generate(d);
+void cg_module::generate() {
+	for (const Decl* d : prog->declarations) {
+		generate(d);
+	}
 }
 
-void
-cg_module::generate(const Decl* d)
-{
-  switch (d->mWhatDecl) {
-  case variableDefinition:
-    return generate_var_decl(static_cast<const VariableDefinitionDecl*>(d));
-  
-  case functionDefinition:
-    return generate_fn_decl(static_cast<const FunctionDefinitionDecl*>(d));
-
-  default: 
-    throw std::logic_error("invalid declaration");
-  }
+void cg_module::generate(const Decl* d) {
+	switch (d->mWhatDecl) {
+		case variableDefinition:
+			return generate_var_decl(static_cast<const VariableDefinitionDecl*>(d));
+		case functionDefinition:
+			return generate_fn_decl(static_cast<const FunctionDefinitionDecl*>(d));
+		default: 
+			throw std::logic_error("invalid declaration");
+	}
 }
 
 
-void 
-cg_module::generate_var_decl(const VariableDefinitionDecl* d)
-{
-  std::string n = get_name(d);
-  llvm::Type* t = get_type(d->type);
-  llvm::Constant* c = llvm::Constant::getNullValue(t);
-  llvm::GlobalVariable* var = new llvm::GlobalVariable(
-      *mod, t, false, llvm::GlobalVariable::ExternalLinkage, c, n);
-
-  // Create the binding.
-  declare(d, var);
+void cg_module::generate_var_decl(const VariableDefinitionDecl* d) {
+	std::string n = get_name(d);
+	llvm::Type* t = get_type(d->type);
+	llvm::Constant* c = llvm::Constant::getNullValue(t);
+	llvm::GlobalVariable* var = new llvm::GlobalVariable(*mod, t, false, llvm::GlobalVariable::ExternalLinkage, c, n);
+	// Create the binding.
+	declare(d, var);
 }
 
 /// Generate a function from the fn expression.
-void 
-cg_module::generate_fn_decl(const FunctionDefinitionDecl* d)
-{
-  cg_function fn(*this, d);
-  fn.define();
+void cg_module::generate_fn_decl(const FunctionDefinitionDecl* d) {
+	cg_function fn(*this, d);
+	fn.define();
 }
 
 // -------------------------------------------------------------------------- //
 // Function implementation
 
-static llvm::FunctionType*
-get_fn_type(llvm::Type* t)
-{
-  assert(llvm::isa<llvm::PointerType>(t));
-  return llvm::cast<llvm::FunctionType>(t->getPointerElementType());
+static llvm::FunctionType* get_fn_type(llvm::Type* t) {
+	assert(llvm::isa<llvm::PointerType>(t));
+	return llvm::cast<llvm::FunctionType>(t->getPointerElementType());
 }
 
 cg_function::cg_function(cg_module& m, const FunctionDefinitionDecl* d)
-  : parent(&m), src(d), fn(), entry(), curr()
-{
-  std::string n = get_name(d);
-  llvm::Type* t = get_type(d);
-  fn = llvm::Function::Create(
-      get_fn_type(t), llvm::Function::ExternalLinkage, n, get_module());
+  : parent(&m), src(d), fn(), entry(), curr() {
+	std::string n = get_name(d);
+	llvm::Type* t = get_type(d);
+	fn = llvm::Function::Create(get_fn_type(t), llvm::Function::ExternalLinkage, n, get_module());
 
-  // Create a binding in the module.
-  parent->declare(d, fn);
-  
-  // Build and emit the entry block.
-  entry = make_block("entry");
-  emit_block(entry);
+	// Create a binding in the module.
+	parent->declare(d, fn);
 
-  llvm::IRBuilder<> ir(get_current_block());
-  
-  // Configure function parameters and declare them as locals.
-  assert(d->parameters.size() == fn->arg_size());
-  auto pi = d->parameters.begin();
-  auto ai = fn->arg_begin();
-  while (ai != fn->arg_end()) {
-    const ParameterDecl* parm = static_cast<const ParameterDecl*>(*pi);
-    llvm::Argument& arg = *ai;
+	// Build and emit the entry block.
+	entry = make_block("entry");
+	emit_block(entry);
 
-    // Configure each parameter.
-    arg.setName(get_name(parm));
+	llvm::IRBuilder<> ir(get_current_block());
 
-    // Declare local variable for each parameter and initialize it
-    // with wits corresponding value.
-    llvm::Value* var = ir.CreateAlloca(arg.getType(), nullptr, arg.getName());
-    declare(parm, var);
+	// Configure function parameters and declare them as locals.
+	assert(d->parameters.size() == fn->arg_size());
+	auto pi = d->parameters.begin();
+	auto ai = fn->arg_begin();
+	
+	while (ai != fn->arg_end()) {
+		const ParameterDecl* parm = static_cast<const ParameterDecl*>(*pi);
+		llvm::Argument& arg = *ai;
 
-    // Initialize with the value of the argument.
-    ir.CreateStore(&arg, var);
-    
-    ++ai;
-    ++pi;
-  }
+		// Configure each parameter.
+		arg.setName(get_name(parm));
 
+		// Declare local variable for each parameter and initialize it
+		// with wits corresponding value.
+		llvm::Value* var = ir.CreateAlloca(arg.getType(), nullptr, arg.getName());
+		declare(parm, var);
+
+		// Initialize with the value of the argument.
+		ir.CreateStore(&arg, var);
+
+		++ai;
+		++pi;
+	}
 }
 
-void
-cg_function::declare(const Decl* d, llvm::Value* v)
-{
-  assert(locals.count(d) == 0);
-  locals.emplace(d, v);
+void cg_function::declare(const Decl* d, llvm::Value* v) {
+	assert(locals.count(d) == 0);
+	locals.emplace(d, v);
 }
 
-llvm::Value*
-cg_function::lookup(const Decl* d) const
-{
-  auto iter = locals.find(d);
-  if (iter != locals.end())
-    return iter->second;
-  else
-    return parent->lookup(d);
+llvm::Value* cg_function::lookup(const Decl* d) const {
+	auto iter = locals.find(d);
+	if (iter != locals.end()) {
+		return iter->second;
+	}
+	else {
+		return parent->lookup(d);
+	}
 }
 
-llvm::BasicBlock*
-cg_function::make_block(const char* label)
-{
-  return llvm::BasicBlock::Create(*get_context(), label);
+llvm::BasicBlock* cg_function::make_block(const char* label) {
+	return llvm::BasicBlock::Create(*get_context(), label);
 }
 
-void
-cg_function::emit_block(llvm::BasicBlock* bb)
-{
-  bb->insertInto(get_function());
-  curr = bb;
+void cg_function::emit_block(llvm::BasicBlock* bb) {
+	bb->insertInto(get_function());
+	curr = bb;
 }
 
 /// Creates a return instruction for the expression.
-void
-cg_function::define()
-{
-  generate_stmt(src->body);
+void cg_function::define() {
+	generate_stmt(src->body);
 }
 
 llvm::Value* cg_function::generate_expr(const Expr* e) {
-  switch (e->mWhatExpr) {
-	  case booleanLiteral:
-		return generate_bool_expr(static_cast<const BooleanLiteralExpr*>(e));
-	  case integerLiteral:
-		return generate_int_expr(static_cast<const IntegerLiteralExpr*>(e));
-	  case floatLiteral:
-		return generate_float_expr(static_cast<const FloatLiteralExpr*>(e));
-	  case identifier:
-		return generate_id_expr(static_cast<const IdentifierExpr*>(e));
-	  case unaryExpression:
-		return generate_unop_expr(static_cast<const UnaryOperatorExpr*>(e));
-	  case binaryExpression:
-		return generate_binop_expr(static_cast<const BinaryOperatorExpr*>(e));
-	  case callExpression:
-		return generate_call_expr(static_cast<const CallExpr*>(e));
-	  case indexExpression:
-		return generate_index_expr(static_cast<const IndexExpr*>(e));
-	  case conditionalExpression:
-		return generate_cond_expr(static_cast<const ConditionalExpr*>(e));
-	  case assignmentExpression:
-		return generate_assign_expr(static_cast<const AssignmentExpr*>(e));
-	  case convExpression:
-		return generate_conv_expr(static_cast<const ConvExpr*>(e));
-	  default: 
-		throw std::runtime_error("invalid expression");
-  }
+	switch (e->mWhatExpr) {
+		case booleanLiteral:
+			return generate_bool_expr(static_cast<const BooleanLiteralExpr*>(e));
+		case integerLiteral:
+			return generate_int_expr(static_cast<const IntegerLiteralExpr*>(e));
+		case floatLiteral:
+			return generate_float_expr(static_cast<const FloatLiteralExpr*>(e));
+		case identifier:
+			return generate_id_expr(static_cast<const IdentifierExpr*>(e));
+		case unaryExpression:
+			return generate_unop_expr(static_cast<const UnaryOperatorExpr*>(e));
+		case binaryExpression:
+			return generate_binop_expr(static_cast<const BinaryOperatorExpr*>(e));
+		case callExpression:
+			return generate_call_expr(static_cast<const CallExpr*>(e));
+		case indexExpression:
+			return generate_index_expr(static_cast<const IndexExpr*>(e));
+		case conditionalExpression:
+			return generate_cond_expr(static_cast<const ConditionalExpr*>(e));
+		case assignmentExpression:
+			return generate_assign_expr(static_cast<const AssignmentExpr*>(e));
+		case convExpression:
+			return generate_conv_expr(static_cast<const ConvExpr*>(e));
+		default: 
+			throw std::runtime_error("invalid expression");
+	}
 }
 
 llvm::Value* cg_function::generate_bool_expr(const BooleanLiteralExpr* e) {
-  return llvm::ConstantInt::get(get_type(e), e->boolValue, false);
+	return llvm::ConstantInt::get(get_type(e), e->boolValue, false);
 }
 
 llvm::Value* cg_function::generate_int_expr(const IntegerLiteralExpr* e) {
-  return llvm::ConstantInt::get(get_type(e), e->intValue, true);
+	return llvm::ConstantInt::get(get_type(e), e->intValue, true);
 }
 
 llvm::Value* cg_function::generate_float_expr(const FloatLiteralExpr* e) {
-  return llvm::ConstantFP::get(get_type(e), e->floatValue);
+	return llvm::ConstantFP::get(get_type(e), e->floatValue);
 }
 
 llvm::Value* cg_function::generate_id_expr(const IdentifierExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_unop_expr(const UnaryOperatorExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 // Note that &e is equivalent to e. This is because e is already an address.
 llvm::Value* cg_function::generate_address_expr(const UnaryOperatorExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 // Note that *e is equivalent to e. This is because e is already an address.
 llvm::Value* cg_function::generate_deref_expr(const UnaryOperatorExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_binop_expr(const BinaryOperatorExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_relational_expr(const BinaryOperatorExpr* e) {
-  // llvm::Value* lhs = generate_expr(e->get_lhs());
-  // llvm::Value* rhs = generate_expr(e->get_rhs());
-  // llvm::IRBuilder<> ir(get_current_block());
-  // switch (e->get_operator()) {
-  // case op_eq:
-  //   return ir.CreateICmpEQ(lhs, rhs);
-  // case op_ne:
-  //   return ir.CreateICmpNE(lhs, rhs);
-  // case op_lt:
-  //   return ir.CreateICmpSLT(lhs, rhs);
-  // case op_gt:
-  //   return ir.CreateICmpSGT(lhs, rhs);
-  // case op_le:
-  //   return ir.CreateICmpSLE(lhs, rhs);
-  // case op_ge:
-  //   return ir.CreateICmpSGE(lhs, rhs);
-  // default:
-  //   throw std::logic_error("invalid operator");
-  // }
-  return nullptr;
+	// llvm::Value* lhs = generate_expr(e->get_lhs());
+	// llvm::Value* rhs = generate_expr(e->get_rhs());
+	// llvm::IRBuilder<> ir(get_current_block());
+	// switch (e->get_operator()) {
+	// case op_eq:
+	//   return ir.CreateICmpEQ(lhs, rhs);
+	// case op_ne:
+	//   return ir.CreateICmpNE(lhs, rhs);
+	// case op_lt:
+	//   return ir.CreateICmpSLT(lhs, rhs);
+	// case op_gt:
+	//   return ir.CreateICmpSGT(lhs, rhs);
+	// case op_le:
+	//   return ir.CreateICmpSLE(lhs, rhs);
+	// case op_ge:
+	//   return ir.CreateICmpSGE(lhs, rhs);
+	// default:
+	//   throw std::logic_error("invalid operator");
+	// }
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_call_expr(const CallExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_index_expr(const IndexExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_assign_expr(const AssignmentExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 llvm::Value* cg_function::generate_cond_expr(const ConditionalExpr* e) {
-  return nullptr;
+	return nullptr;
 }
 
 // FIXME: Clean this up.
