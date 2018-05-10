@@ -54,6 +54,22 @@ class BasicType : public Type {
 		whatBasicType mWhatBasicType;
 };
 
+class BoolType : public Type {
+	
+};
+
+class CharType : public Type {
+	
+};
+
+class IntType : public Type {
+	
+};
+
+class FloatType : public Type {
+	
+};
+
 class FunctionType : public Type {
 	public:
 		FunctionType(Type* pT, Type* rT)

@@ -32,7 +32,7 @@ class Stmt {
 		whatStmt mWhatStmt;
 };
 
-class BlockStmt : protected Stmt {
+class BlockStmt : public Stmt {
 	public:
 		BlockStmt(Stmt* arg)
 			: Stmt(blockStatement), argument(arg) {
@@ -41,7 +41,11 @@ class BlockStmt : protected Stmt {
 		Stmt* argument;
 };
 
-class StmtSequence : protected Stmt {
+class WhenStmt : public Stmt {
+	
+};
+
+class StmtSequence : public Stmt {
 	public:
 		StmtSequence(Stmt* l, Stmt* r)
 			: Stmt(statementSequence), lhs(l), rhs(r) {
@@ -51,7 +55,7 @@ class StmtSequence : protected Stmt {
 		Stmt* rhs;
 };
 
-class IfStmt : protected Stmt {
+class IfStmt : public Stmt {
 	public:
 		IfStmt(Expr* cond, Stmt* res)
 			: Stmt(ifStatement), condition(cond), result(res) {
@@ -61,7 +65,7 @@ class IfStmt : protected Stmt {
 		Stmt* result;
 };
 
-class IfElseStmt : protected Stmt {
+class IfElseStmt : public Stmt {
 	public:
 		IfElseStmt(Expr* cond, Stmt* tB, Stmt* fB)
 			: Stmt(ifElseStatement), condition(cond), trueBranch(tB), falseBranch(fB) {
@@ -72,7 +76,7 @@ class IfElseStmt : protected Stmt {
 		Stmt* falseBranch;
 };
 
-class WhileStmt : protected Stmt {
+class WhileStmt : public Stmt {
 	public:
 		WhileStmt(Expr* cond, Stmt* res)
 			: Stmt(whileStatement), condition(cond), result(res) {
@@ -82,21 +86,25 @@ class WhileStmt : protected Stmt {
 		Stmt* result;
 };
 
-class BreakStmt : protected Stmt {
+class BreakStmt : public Stmt {
 	public:
 		BreakStmt()
 			: Stmt(breakStatement) {
 		}
 };
 
-class ContinueStmt : protected Stmt {
+class ContinueStmt : public Stmt {
 	public:
 		ContinueStmt()
 			: Stmt(continueStatement) {
 		}
 };
 
-class ReturnWithExpressionStmt : protected Stmt {
+class ReturnStmt : public Stmt {
+	
+};
+
+class ReturnWithExpressionStmt : public Stmt {
 	public:
 		ReturnWithExpressionStmt(Expr* rE)
 			: Stmt(returnWithExpressionStatement), returnExpression(rE) {
@@ -105,25 +113,25 @@ class ReturnWithExpressionStmt : protected Stmt {
 		Expr* returnExpression;
 };
 
-class ReturnWithoutExpressionStmt : protected Stmt {
+class ReturnWithoutExpressionStmt : public Stmt {
 	public:
 		ReturnWithoutExpressionStmt()
 			: Stmt(returnWithoutExpressionStatement) {
 		}
 };
 
-class DeclarationStatement : protected Stmt {
+class DeclarationStmt : public Stmt {
 	public:
-		DeclarationStatement(Decl* d)
+		DeclarationStmt(Decl* d)
 			: Stmt(declarationStatement), declaration(d) {
 		}
 		
 		Decl* declaration;
 };
 
-class ExpressionStatement : protected Stmt {
+class ExpressionStmt : public Stmt {
 	public:
-		ExpressionStatement(Expr* e)
+		ExpressionStmt(Expr* e)
 			: Stmt(expressionStatement), expression(e) {
 		}
 		

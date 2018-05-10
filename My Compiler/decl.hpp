@@ -34,16 +34,16 @@ class Decl {
 		whatDecl mWhatDecl;		
 };
 
-class Program : Decl {
+class ProgramDecl : public Decl {
 	public:
-		Program(Decl* d)
+		ProgramDecl(Decl* d)
 			: Decl(program), declaration(d) {
 		}
 		
 		Decl* declaration;
 };
 
-class DeclSequence : Decl {
+class DeclSequence : public Decl {
 	public:
 		DeclSequence(Decl* l, Decl* r)
 			: Decl(declarationSequence), lhs(l), rhs(r) {
@@ -53,9 +53,13 @@ class DeclSequence : Decl {
 		Decl* rhs;
 };
 
-class VariableDefinitionWithExpression : Decl {
+class VariableDefinitionDecl : public Decl {
+	
+};
+
+class VariableDefinitionWithExpressionDecl : public Decl {
 	public:
-		VariableDefinitionWithExpression(Symbol* i, Type* t, Expr* e)
+		VariableDefinitionWithExpressionDecl(Symbol* i, Type* t, Expr* e)
 			: Decl(variableDefinitionWithExpression), identifier(i), type(t), expression(e) {
 		}
 		
@@ -64,9 +68,9 @@ class VariableDefinitionWithExpression : Decl {
 		Expr* expression;
 };
 
-class VariableDefinitionWithoutExpression : Decl {
+class VariableDefinitionWithoutExpressionDecl : public Decl {
 	public:
-		VariableDefinitionWithoutExpression(Symbol* i, Type* t)
+		VariableDefinitionWithoutExpressionDecl(Symbol* i, Type* t)
 			: Decl(variableDefinitionWithExpression), identifier(i), type(t) {
 		}
 		
@@ -74,9 +78,9 @@ class VariableDefinitionWithoutExpression : Decl {
 		Type* type;
 };
 
-class ConstantDefinition : Decl {
+class ConstantDefinitionDecl : public Decl {
 	public:
-		ConstantDefinition(Symbol* i, Type* t, Expr* e)
+		ConstantDefinitionDecl(Symbol* i, Type* t, Expr* e)
 			: Decl(constantDefinition), identifier(i), type(t), expression(e) {
 		}
 		
@@ -85,9 +89,9 @@ class ConstantDefinition : Decl {
 		Expr* expression;
 };
 
-class ValueDefinition : Decl {
+class ValueDefinitionDecl : public Decl {
 	public:
-		ValueDefinition(Symbol* i, Type* t, Expr* e)
+		ValueDefinitionDecl(Symbol* i, Type* t, Expr* e)
 			: Decl(valueDefinition), identifier(i), type(t), expression(e) {
 		}
 		
@@ -96,9 +100,9 @@ class ValueDefinition : Decl {
 		Expr* expression;
 };
 
-class FunctionDefinition : Decl {
+class FunctionDefinitionDecl : public Decl {
 	public:
-		FunctionDefinition(Symbol* i, Decl* p, Type* t, Stmt* s)
+		FunctionDefinitionDecl(Symbol* i, Decl* p, Type* t, Stmt* s)
 			: Decl(functionDefinition), identifier(i), parameters(p), type(t), statement(s) {
 		}
 		
@@ -108,9 +112,9 @@ class FunctionDefinition : Decl {
 		Stmt* statement;
 };
 
-class ParameterList : Decl {
+class ParameterListDecl : public Decl {
 	public:
-		ParameterList(Decl* l, Decl* r)
+		ParameterListDecl(Decl* l, Decl* r)
 			: Decl(parameterList), lhs(l), rhs(r) {
 		}
 		
@@ -118,9 +122,9 @@ class ParameterList : Decl {
 		Decl* rhs;
 };
 
-class Parameter : Decl {
+class ParameterDecl :  public Decl {
 	public:
-		Parameter(Symbol* i, Type* t)
+		ParameterDecl(Symbol* i, Type* t)
 			: Decl(parameter), identifier(i), type(t) {
 		}
 		
@@ -128,5 +132,8 @@ class Parameter : Decl {
 		Type* type;
 };
 
+class TypedDecl : public Decl { 
+
+};
 
 #endif

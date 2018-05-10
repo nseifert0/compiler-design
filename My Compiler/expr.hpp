@@ -315,4 +315,12 @@ class CallExpr : public Expr {
 	
 };
 
+class ConvExpr : public Expr {
+	
+};
+
+class IndexExpr : public Expr {
+	
+};
+
 #endif
