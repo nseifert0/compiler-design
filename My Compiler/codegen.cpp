@@ -623,7 +623,7 @@ void cg_function::generate_decl_stmt(const DeclarationStmt* e) {
 }
 
 void cg_function::generate_expr_stmt(const ExpressionStmt* e) {
-	
+	generate_expr(e->expression);
 }
 
 void generate(const Decl* d) {
