@@ -5,6 +5,7 @@ add_library(lang
   token.cpp
   lexer.cpp
   parser.cpp
+  scope.cpp
   codegen.cpp)
 target_link_libraries(lang ${LLVM_LIBS})
 
