@@ -72,23 +72,33 @@ struct cg_module {
 	cg_module(cg_context& cxt, const ProgramDecl* prog);
 
 	/// Returns the LLVM context.
-	llvm::LLVMContext* get_context() const { return parent->get_context(); }
+	llvm::LLVMContext* get_context() const { 
+		return parent->get_context();
+	}
 
 	/// Returns the underlying LLVM module.
-	llvm::Module* get_module() const { return mod; }
+	llvm::Module* get_module() const {
+		return mod;
+	}
 
 	//  Names
 
 	/// Generates a declaration name for `d`.
-	std::string get_name(const Decl* d) { return parent->get_name(d); }
+	std::string get_name(const Decl* d) { 
+		return parent->get_name(d);
+		}
 
 	// Types
 
 	/// Generate a corresponding type to `t`.
-	llvm::Type* get_type(const Type* t) { return parent->get_type(t); }
+	llvm::Type* get_type(const Type* t) { 
+		return parent->get_type(t); 
+	}
 
 	/// Generates a type corresponding to the type `d`.
-	llvm::Type* get_type(const TypedDecl* d) { return parent->get_type(d); }
+	llvm::Type* get_type(const TypedDecl* d) {
+		return parent->get_type(d);
+	}
 
 	// Global values
 
