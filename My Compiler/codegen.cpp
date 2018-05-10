@@ -600,7 +600,7 @@ void cg_function::generate_when_stmt(const WhenStmt* s) {
 void cg_function::generate_if_stmt(const IfStmt* s) {
 	llvm::BasicBlock* ifTrueBlock = make_block("ifTrue");
 	llvm::BasicBlock* endIfBlock = make_block("endIf");
-	//generate_cond_expr(s->condition);
+	generate_cond_expr(s->condition);
 	//Decide whether or not to take a branch based on condition
 	emit_block(ifTrueBlock);
 	generate_stmt(s->result);
@@ -610,8 +610,12 @@ void cg_function::generate_if_stmt(const IfStmt* s) {
 }
 
 void cg_function::generate_while_stmt(const WhileStmt* s) {
+	llvm::BasicBlock* loopBlock = make_block("loopBlock");
+	llvm::BasicBlock* endBlock = make_block("endBlock");
 	generate_cond_expr(s->condition);
+	emit_block(loopBlock);
 	//Decide whether or not to take a branch based on condition
+	emit_block(endBlock);
 	generate_stmt(s->result);
 }
 
