@@ -64,7 +64,7 @@ class Parser {
 		
 		//Parsing Declarations
 		Decl* parseProgram();
-		Decl* parseDeclarationSeq();
+		DeclList parseDeclarationSeq();
 		Decl* parseDeclaration();
 		Decl* parseLocalDeclaration();
 		Decl* parseObjectDefinition();

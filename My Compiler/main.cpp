@@ -4,8 +4,9 @@
 #include "parser.hpp"
 #include "codegen.hpp"
 
-int main() {
+extern "C" int main(int argc, char* argv[]) {
 	Parser parser("Input.txt");
-	parser.parseType();
+	Decl* myProgram = parser.parseProgram();
+	generate(myProgram);
 	return 0;
 }

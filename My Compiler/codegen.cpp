@@ -393,15 +393,7 @@ cg_module::generate(const Decl* d)
   }
 }
 
-/// Generate a variable.
-///
-/// \todo To declare a global variable, we need to determine if it is
-/// statically or dynamically initialized. A variable is statically 
-/// initialized if it's initializer can be constant folded. Right now,
-/// global variables are simply zero-initialized.
-///
-/// \todo Make a variable initialization context like we do for functions?
-/// That might be pretty elegant.
+
 void 
 cg_module::generate_var_decl(const VariableDefinitionDecl* d)
 {

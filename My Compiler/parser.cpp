@@ -421,17 +421,21 @@ Stmt* Parser::parseExpressionStatement() {
 //Parsing Declarations
 Decl* Parser::parseProgram() {
 	if(!lexer.eof()) {
-		parseDeclarationSeq();
+		DeclList sequence = parseDeclarationSeq();
+		return new ProgramDecl(sequence);
 	}
-	return new Decl(declIsTest);
+	else {
+		return nullptr;
+	}
 }
 
-Decl* Parser::parseDeclarationSeq() {
-	parseDeclaration();
+DeclList Parser::parseDeclarationSeq() {
+	DeclList dL;
+	dL.push_back(parseDeclaration());
 	while(!lexer.eof()) {
-		parseDeclaration();
+		dL.push_back(parseDeclaration());
 	}
-	return new Decl(declIsTest);
+	return dL;
 }
 
 Decl* Parser::parseDeclaration() {
@@ -442,6 +446,10 @@ Decl* Parser::parseDeclaration() {
 		case Colon:
 			parseObjectDefinition();
 			break;
+		default:
+			std::stringstream ss;
+			ss << "Expected a function of object definition";
+			throw std::runtime_error(ss.str());
 	}
 	return new Decl(declIsTest);
 }
