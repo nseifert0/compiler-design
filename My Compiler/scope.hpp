@@ -1,5 +1,5 @@
 #ifndef SCOPE_HPP
-#defince SCOPE_HPP
+#define SCOPE_HPP
 
 
 

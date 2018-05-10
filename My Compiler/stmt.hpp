@@ -72,11 +72,11 @@ class IfElseStmt : public Stmt {
 
 class WhileStmt : public Stmt {
 	public:
-		WhileStmt(Expr* cond, Stmt* res)
+		WhileStmt(ConditionalExpr* cond, Stmt* res)
 			: Stmt(whileStatement), condition(cond), result(res) {
 		}
 
-		Expr* condition;
+		ConditionalExpr* condition;
 		Stmt* result;
 };
 
