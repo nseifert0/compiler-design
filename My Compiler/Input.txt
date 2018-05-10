@@ -1,2 +1,3 @@
-var x : int;
-var c : char;
+def hi() char {
+	if() var c : char;
+}

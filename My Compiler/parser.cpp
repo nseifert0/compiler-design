@@ -1,11 +1,10 @@
 //Nicholas Seifert
 //Compiler Design - Spring 2018
-//TODO: Implement arrow operator and fix sections with arrow operator
-//		Add a print function for the token names, this will allow for errors to show expected token 
-//		Add parsing for pointer types
+
 #include "parser.hpp"
 
 #include <sstream>
+#include <string>
 
 void Parser::parse() {
 	parseProgram();
@@ -21,9 +20,6 @@ Type* Parser::parseBasicType() {
 		case Keyword_Float:
 		case Keyword_Char:
 			return semantics.basicType(accept());
-		
-		
-		//Not sure what to do here based upon the language description, is there an -> operator?
 		case Left_Paren:
 			accept();
 			if(lookAhead(0).name != Right_Paren) {
@@ -34,7 +30,7 @@ Type* Parser::parseBasicType() {
 		
 		default:
 			std::stringstream ss;
-			ss << "Syntax Error";
+			ss << "Syntax Error in Parsing a basic type";
 			throw std::runtime_error(ss.str());
 	}
 }
@@ -106,7 +102,7 @@ Expr* Parser::parsePrimaryExpression() {
 		
 		default:
 			std::stringstream ss;
-			ss << "Syntax Error";
+			ss << "Syntax Error in Parsing Primary Expression";
 			throw std::runtime_error(ss.str());
 	}
 	return new Expr(exprIsTest);
@@ -302,7 +298,8 @@ Expr* Parser::parseAssignmentExpression() {
 }
 
 Expr* Parser::parseExpression() {
-	return parseAssignmentExpression();
+	return new Expr(exprIsTest);
+	//return parseAssignmentExpression();
 }
 
 Expr* Parser::parseConstantExpression() {
@@ -316,62 +313,63 @@ Expr* Parser::parseConstantExpression() {
 Stmt* Parser::parseStatement() {
 	switch(lookAhead(0).name) {
 		case Right_Bracket:
-			parseBlockStatement();
+			return parseBlockStatement();
 			break;
 		case Keyword_If:
-			parseIfStatement();
+			return parseIfStatement();
 			break;
 		case Keyword_While:
-			parseWhileStatement();
+			return parseWhileStatement();
 			break;
 		case Keyword_Continue:
-			parseContinueStatement();
+			return parseContinueStatement();
 			break;
 		case Keyword_Return:
-			parseReturnStatement();
+			return parseReturnStatement();
 			break;
 		case Keyword_Var:
 		case Keyword_Let:
 		case Keyword_Def:
-			parseDeclarationStatement();
+			return parseDeclarationStatement();
 			break;
 		default:
-			parseExpressionStatement();
+			return parseExpressionStatement();
 			break;
 	}
-	return new Stmt(stmtIsTest);
 }
 
 Stmt* Parser::parseBlockStatement() {
-	acceptSpecific(Left_Bracket);
-	if(lookAhead(0).name != Right_Bracket) {
-		parseStatementSeq();
+	acceptSpecific(Left_Brace);
+	StmtSequence sS;
+	if(lookAhead(0).name != Right_Brace) {
+		sS = parseStatementSeq();
 	}
-	acceptSpecific(Right_Bracket);
-	return new Stmt(stmtIsTest);
+	acceptSpecific(Right_Brace);
+	return new BlockStmt(sS);
 }
 
-Stmt* Parser::parseStatementSeq() {
+StmtSequence Parser::parseStatementSeq() {
 	//Statement Sequences Only Appear in Block Statements
 	//Block Statements are Surrounded by Brackets.
-	parseStatement();
+	StmtSequence sS;
+	sS.push_back(parseStatement());
 	while(lookAhead(0).name != Right_Bracket) {
-		parseStatement();
+		sS.push_back(parseStatement());
 	}
-	return new Stmt(stmtIsTest);
+	return sS;
 }
 
 Stmt* Parser::parseIfStatement() {
 	acceptSpecific(Keyword_If);
 	acceptSpecific(Left_Paren);
-	parseExpression();
+	Expr* cond = parseExpression();
 	acceptSpecific(Right_Paren);
-	parseStatement();
+	Stmt* res = parseStatement();
 	if(lookAhead(0).name == Keyword_Else) {
 		accept();
 		parseStatement();
 	}
-	return new Stmt(stmtIsTest);
+	return new IfStmt(cond, res);
 }
 
 Stmt* Parser::parseWhileStatement() {
@@ -446,7 +444,7 @@ Decl* Parser::parseDeclaration() {
 			break;
 		default:
 			std::stringstream ss;
-			ss << "Expected a function of object definition";
+			ss << "Expected a function or object definition";
 			throw std::runtime_error(ss.str());
 	}
 }
@@ -522,7 +520,6 @@ Decl* Parser::parseFunctionDefinition() {
 		//DeclList dL = parseParameterList();
 	}
 	acceptSpecific(Right_Paren);
-	//TODO IMPLEMENT ARROW OPERATOR
 	//acceptSpecific(Arrow_Operator);
 	Type* t = parseType();
 	Stmt* s = parseBlockStatement();
@@ -569,8 +566,105 @@ Token Parser::acceptSpecific(TokenName tokenName) {
 	}
 	else {
 		std::stringstream ss;
-		ss << "Syntax Error";
+		ss << "Syntax Error expected a" << getTokenNameAsString(tokenName);
 		throw std::runtime_error(ss.str());
+	}
+}
+
+std::string Parser::getTokenNameAsString(TokenName tN) {
+	switch(tN) {
+		case Left_Brace:
+			return "{";
+		case Right_Brace:
+			return "}";
+		case Left_Paren:
+			return "(";
+		case Right_Paren:
+			return ")";
+		case Left_Bracket:
+			return "[";
+		case Right_Bracket:
+			return "]";
+		case Comma:
+			return ",";
+		case Semicolon:
+			return ":";
+		case Colon:
+			return ";";
+		case Relational_Operator:
+			return "Relational_Operator";
+		case Arithmetic_Operator:
+			return "Arithmetic_Operator";
+		case Bitwise_Operator:
+			return "Bitwise_Operator";
+		case Logical_Operator:
+			return "";
+		case Conditional_Operator:
+			return "";
+		case Assignment_Operator:
+			return "";
+		case Shift_Operator:
+			return "";
+		case Keyword_And:
+			return "And";
+		case Keyword_As:
+			return "As";
+		case Keyword_Bool:
+			return "Bool";
+		case Keyword_Break:
+			return "Break";
+		case Keyword_Char:
+			return "Char";
+		case Keyword_Const:
+			return "Const";
+		case Keyword_Continue:
+			return "Continue";
+		case Keyword_Def:
+			return "";
+		case Keyword_Else:
+			return "";
+		case Keyword_False:
+			return "";
+		case Keyword_Float:
+			return "";
+		case Keyword_If:
+			return "";
+		case Keyword_Int:
+			return "";
+		case Keyword_Let:
+			return "";
+		case Keyword_Not:
+			return "";
+		case Keyword_Or:
+			return "";
+		case Keyword_Return:
+			return "";
+		case Keyword_True:	
+			return "";
+		case Keyword_Var:
+			return "";
+		case Keyword_Void:
+			return "";
+		case Keyword_Volatile:
+			return "";
+		case Keyword_While:
+			return "";
+		case Identifier:
+			return "";
+		case Decimal_Integer_Literal:
+			return "";
+		case Hexadecimal_Integer_Literal:
+			return "";
+		case Binary_Integer_Literal:
+			return "";
+		case Floating_Point_Literal:
+			return "";
+		case Boolean_Literal:
+			return "";
+		case Character_Literal:
+			return "";
+		case String_Literal:
+			return "";
 	}
 }
 

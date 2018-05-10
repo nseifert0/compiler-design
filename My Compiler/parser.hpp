@@ -12,6 +12,7 @@
 #include "decl.hpp"
 
 #include <deque>
+#include <string>
 
 class Parser {
 	public:
@@ -53,7 +54,7 @@ class Parser {
 		//Parsing Statements
 		Stmt* parseStatement();
 		Stmt* parseBlockStatement();
-		Stmt* parseStatementSeq();
+		StmtSequence parseStatementSeq();
 		Stmt* parseIfStatement();
 		Stmt* parseWhileStatement();
 		Stmt* parseBreakStatement();
@@ -85,6 +86,7 @@ class Parser {
 		Token lookAhead(int howMuch);
 		Token accept();
 		Token acceptSpecific(TokenName tokenName);
+		std::string getTokenNameAsString(TokenName tN);
 		bool checkIfPostfixType();
 		bool checkIfUnaryExpression();
 		bool checkIfMultiplicativeExpression();
