@@ -452,8 +452,7 @@ Decl* Parser::parseDeclaration() {
 }
 
 Decl* Parser::parseLocalDeclaration() {
-	parseObjectDefinition();
-	return new Decl(declIsTest);
+	return parseObjectDefinition();
 }
 
 Decl* Parser::parseObjectDefinition() {

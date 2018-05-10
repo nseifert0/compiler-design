@@ -34,27 +34,19 @@ class Stmt {
 		whatStmt mWhatStmt;
 };
 
+using StmtSequence = std::vector<Stmt*>;
+
 class BlockStmt : public Stmt {
 	public:
-		BlockStmt(Stmt* arg)
-			: Stmt(blockStatement), argument(arg) {
+		BlockStmt(StmtSequence& sS)
+			: Stmt(blockStatement), sequence(sS) {
 		}
 		
-		Stmt* argument;
+		StmtSequence sequence;
 };
 
 class WhenStmt : public Stmt {
 	
-};
-
-class StmtSequence : public Stmt {
-	public:
-		StmtSequence(Stmt* l, Stmt* r)
-			: Stmt(statementSequence), lhs(l), rhs(r) {
-		}
-		
-		Stmt* lhs;
-		Stmt* rhs;
 };
 
 class IfStmt : public Stmt {

@@ -669,6 +669,8 @@ cg_function::generate_stmt(const Stmt* s)
 void
 cg_function::generate_block_stmt(const BlockStmt* s)
 {
+	for (const Stmt* st : s->sequence)
+		generate_stmt(st);
 }
 
 void

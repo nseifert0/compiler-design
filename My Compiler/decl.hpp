@@ -52,16 +52,6 @@ class ProgramDecl : public Decl {
 		DeclList declarations;
 };
 
-class DeclSequence : public Decl {
-	public:
-		DeclSequence(Decl* l, Decl* r)
-			: Decl(declarationSequence), lhs(l), rhs(r) {
-		}
-		
-		Decl* lhs;
-		Decl* rhs;
-};
-
 class VariableDefinitionDecl : public Decl {
 	public:
 		VariableDefinitionDecl(Symbol* i, Type* t, Expr* e)
