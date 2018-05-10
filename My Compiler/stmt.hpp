@@ -51,11 +51,11 @@ class WhenStmt : public Stmt {
 
 class IfStmt : public Stmt {
 	public:
-		IfStmt(Expr* cond, Stmt* res)
+		IfStmt(ConditionalExpr* cond, Stmt* res)
 			: Stmt(ifStatement), condition(cond), result(res) {
 		}
 
-		Expr* condition;
+		ConditionalExpr* condition;
 		Stmt* result;
 };
 
